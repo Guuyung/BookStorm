@@ -1,5 +1,5 @@
 <template>
-  <div class="tabcontrol"  :class="{'isfix' : isFixed}"  :style="{top:top+'px'}">
+  <div class="tabcontrol"  :class="{'isfix' : isFixed}"  :style="{top:toplength+'px'}">
     <div v-for="(option,index) in options " class="option"
          @click="tap(index)"
          :key="option"
@@ -13,7 +13,7 @@ export default {
 
 
   props :{
-    top:{
+    toplength:{
       type: Number,
       default:0
     },
@@ -36,16 +36,22 @@ export default {
 
 
     onMounted(()=>{
-      let position=document.querySelector('.tabcontrol').getBoundingClientRect().top;
+
+      let ele=document.querySelector('.tabcontrol');
+      let position=ele.getBoundingClientRect().top;
+      console.log(props.toplength)
+      console.log(document.body.scrollTop)
       const handleScroll=()=>{
 
           let scrolltop=window.pageYOffset;
 
         console.log("position      "+position)
         console.log("scrolltop     "+scrolltop)
-        if(scrolltop>position-props.top)
+        if(scrolltop>position-props.toplength)
         {
+
           isFixed.value=true;
+          console.log(ele.getBoundingClientRect().top)
         }else
           isFixed.value=false;
       }
@@ -64,20 +70,17 @@ export default {
 
 <style scoped lang="scss">
   .isfix {
-    //left: 20px;
-    //right: 20px;
+    margin-top: 0;
     width: calc(100vw - 20px);
     position: fixed;
   }
   .tabcontrol {
-
     background: #FFFFFF;
-
     border: 1px solid rgba(136,136,136,.5) ;
     box-shadow: 2px 2px 11px #888888;
-
     line-height: 40px;
-    margin: 10px 10px 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     display: flex;
     z-index: 2;
     .option {

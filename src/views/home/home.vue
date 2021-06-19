@@ -16,7 +16,7 @@
     <recommend :recommend="recommend"></recommend>
 
 <!--    控制选项卡-->
-    <tab-control  :top="45" :options="['畅销','新书','精选']" @tabclick="tabclick" class="tabcontrol"></tab-control>
+    <tab-control  :toplength="45" :options="['畅销','新书','精选']" @tabclick="tabclick" class="tabcontrol"></tab-control>
 
 
 <!--    书列表-->
@@ -60,6 +60,10 @@ export default {
 </script>
 
 <style>
+.tabcontrol {
+  margin-top: 10px;
+}
+
 * {
   margin-left: 10px;
   margin-right: 10px;
