@@ -4,7 +4,7 @@
       <div class="book" v-for="item in recommend.slice(0,4)" key="item.id">
         <a href="" @click.prevent="goDetail(item.id)">
           <img :src="item.cover_url" >
-          <span>{{item.title}}</span>
+          <div class="title">{{item.title}}</div>
         </a>
       </div>
 
@@ -14,7 +14,7 @@
 
 
 </template>
-x
+
 <script>
 import {useRouter} from 'vue-router'
 export default {
@@ -46,7 +46,7 @@ export default {
 
 <style scoped lang="scss">
 .showbook{
-  span {
+  .title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

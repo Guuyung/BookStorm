@@ -8,71 +8,21 @@
     <title>Document</title>
 </head>
 <body>
-    <div>a</div>
-    <div>a</div>
-    <div>a</div>
-        <div id="s">abcd</div>
-    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>    <div>a</div>
-    <div>a</div>
-    <div>a</div>
-
-</body>
+    <div>xx</div>
 <script>
-    window.addEventListener('scroll',f);
-
-    function f()
-    {
-        let box=document.getElementById('s');
-        let offsetTop=box.offsetTop;
-        let s=window.pageYOffset;
-
-
-        if(s>offsetTop)
-        {
-            box.style.position='fixed';
-            box.style.top='0';
-            box.style.zIndex='999';
-
-        }
-        else  box.style.position='relative'
-    }
-
-
 
 </script>
 <style>
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    #s {
-        /*margin-top: 30px;*/
-        font-size: 30px;
-        line-height: 30px;
-        width: 50px;
-        height: 100px;
-
-
+    body {position: relative}
+    div {
         background-color: blue;
+        width: 400px;
+        height: 500px;
+        top: 30px;
+        left: 0;
+        right: 0;
+        position: absolute;
     }
 </style>
+</body>
 </html>

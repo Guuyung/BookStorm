@@ -5,6 +5,7 @@
     <navigator>
       <template v-slot:default>Book Storm</template>
       <template v-slot:left>
+<!--        用div来占位默认的返回键，首页不需要返回键的显示-->
         <div></div>
       </template>
     </navigator>
@@ -16,11 +17,11 @@
     <recommend :recommend="recommend"></recommend>
 
 <!--    控制选项卡-->
-    <tab-control  :toplength="45" :options="['畅销','新书','精选']" @tabclick="tabclick" class="tabcontrol"></tab-control>
+    <tab-control  :toplength="45" :options="['畅销','新书','精选']"  class="tabcontrol"></tab-control>
 
 
 <!--    书列表-->
-    <booklist></booklist>
+    <booklist class="booklist"></booklist>
 
   </div>
 </template>
@@ -28,8 +29,8 @@
 <script>
 import Navigator from "@/components/common/navigator";
 import Banner from "@/views/home/banner";
-import {getHomeData} from "@/network/home";
-import {ref, onMounted} from 'vue'
+import {getHomeData,getGoodsList} from "@/network/home";
+import {ref, reactive,onMounted} from 'vue'
 import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
@@ -38,22 +39,20 @@ export default {
   components: {Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
     const recommend = ref([]);
-    let curindex=ref(0);
+
 
 
     onMounted(() => {
       getHomeData().then((res) => {
             recommend.value = res.goods.data;
           }
-      )
+      );
+
     })
 
-    let tabclick=(index)=>{
-      curindex.value=index;
-    }
 
     return {
-      recommend,curindex,tabclick
+      recommend
     }
   }
 }
@@ -63,7 +62,9 @@ export default {
 .tabcontrol {
   margin-top: 10px;
 }
-
+.booklist {
+  margin-top: 11px ;
+}
 * {
   margin-left: 10px;
   margin-right: 10px;

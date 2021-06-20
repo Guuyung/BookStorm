@@ -9,6 +9,7 @@
 
 <script>
   import {ref,onMounted} from 'vue';
+  import {useStore} from 'vuex'
 export default {
 
 
@@ -24,11 +25,14 @@ export default {
   },
   setup(props,{emit})
   {
+    let store=useStore();
     let curactive=ref(0);
 
+    //点击选项卡切换事件
     let tap=(index)=>{
       curactive.value=index;
-      emit('tabclick',index);
+      store.commit('changecurtab',index);
+      // console.log(store.state.curtab)
     }
 
     let isFixed=ref(false);
@@ -39,19 +43,13 @@ export default {
 
       let ele=document.querySelector('.tabcontrol');
       let position=ele.getBoundingClientRect().top;
-      console.log(props.toplength)
-      console.log(document.body.scrollTop)
       const handleScroll=()=>{
 
           let scrolltop=window.pageYOffset;
-
-        console.log("position      "+position)
-        console.log("scrolltop     "+scrolltop)
         if(scrolltop>position-props.toplength)
         {
 
           isFixed.value=true;
-          console.log(ele.getBoundingClientRect().top)
         }else
           isFixed.value=false;
       }

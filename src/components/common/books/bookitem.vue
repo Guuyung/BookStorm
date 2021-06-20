@@ -1,14 +1,17 @@
 <template>
   <div class="bookitem">
-    <img src="~assets/images/b.png" alt="">
-    <p class="title">标题</p>
+    <img :src="imgsrc" class="bookimg">
+
     <div class="info">
 
+      <div class="title">{{title}}</div>
 
-    <div class="price">￥ 价格</div>
+    <div class="price">￥ {{price}}</div>
+
     <div class="collection">
+      收藏数
       <img src="~assets/images/collect.png" alt="">
-      <span class="collectnum">3</span>
+      <span class="collectnum">{{collectNum}}</span>
     </div>
 
     </div>
@@ -17,7 +20,28 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props:{
+    imgsrc:{
+      type:String,
+      default:""
+    },
+    price:{
+      type:Number,
+      default:0
+    },
+    title:{
+      type:String,
+      default:""
+    },
+    collectNum:{
+      type:Number,
+      default:0
+    }
+
+  }
+
+}
 </script>
 
 <style scoped lang="scss">
@@ -26,34 +50,36 @@ export default {}
     position: relative;
 
     width: 46%;
-    img {
+    .bookimg {
       width: 100%;
+      height: 70%;
+      border-radius: 5px;
     }
-    .title {
-      text-align: center;
-      display: block;
-      padding: 3px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+
     .info{
-
       display: flex;
+      justify-content: center;
+      flex-direction: column;
 
+      .title {
+        text-align: center;
+        width: 100%;
+        display: block;
+        padding: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
       .price {
-
-       text-align: center;
-        flex: 1;
+        text-align: center;
         color: red;
-        padding-left: 5px;
-        display: inline-block;
+        padding: 5px
       }
 
       .collection {
+        text-align: center;
 
-        flex: 1;
         img {
           margin: 0px 3px;
           width: 14px;
