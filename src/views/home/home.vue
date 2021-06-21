@@ -10,6 +10,9 @@
       </template>
     </navigator>
 
+    <tab-control class="fixTabcontrol" :options="['畅销','新书','精选']" v-show="isshow"></tab-control>
+
+
     <!--      banner-->
     <div class="wrapper">
 
@@ -19,9 +22,10 @@
         <!--    推荐栏-->
         <recommend :recommend="recommend"></recommend>
 
-        <!--    控制选项卡-->
-        <tab-control :toplength="45" :options="['畅销','新书','精选']" class="tabcontrol"></tab-control>
-
+        <div ref="tabref" class="out" v-show="!isshow">
+          <!--    控制选项卡-->
+          <tab-control :options="['畅销','新书','精选']" class="tabcontrol"></tab-control>
+        </div>
 
         <!--    书列表-->
         <booklist class="booklist" :booklist="booklist"></booklist>
@@ -48,50 +52,50 @@ import {useStore} from "vuex";
 export default {
   components: {Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
-    let store=useStore();
+    let isshow = ref(false);
+    let tabref = ref(null);
+    let store = useStore();
     const recommend = ref([]);
     let booklist = reactive({
-      sales: {books: [],index:1},
-      new: {books: [],index:1},
-      recommend: {books: [],index:1},
+      sales: {books: [], index: 1},
+      new: {books: [], index: 1},
+      recommend: {books: [], index: 1},
     });
 
+    let tofix = ref(false);
 
-    let t=computed(()=>store.state.curtab);
+    let t = computed(() => store.state.curtab);
 
     //更新列表数据
-    function updateBookList()
-    {
-      let curtabWord='';
-      switch (t.value)
-      {
+    function updateBookList() {
+      let curtabWord = '';
+      switch (t.value) {
         case 0:
-          curtabWord='sales';
+          curtabWord = 'sales';
           break;
         case 1:
-          curtabWord='new';
+          curtabWord = 'new';
           break;
         case 2:
-          curtabWord='recommend';
+          curtabWord = 'recommend';
           break;
       }
       // console.log("curbooklist    " + curtabWord)
-      let curType=booklist[curtabWord];
+      let curType = booklist[curtabWord];
 
       curType.index++;
-      let curindex=curType.index;
+      let curindex = curType.index;
       // console.log('curindex       '+ curindex);
-      getGoodsList(curindex,curtabWord).then(res=>{
+      getGoodsList(curindex, curtabWord).then(res => {
 
-       nextTick(()=>{
-         curType.books=curType.books.concat(res.goods.data);
-       })
+        nextTick(() => {
+          curType.books = curType.books.concat(res.goods.data);
+        })
 
 
       })
 
     }
-
 
 
     onMounted(() => {
@@ -120,6 +124,16 @@ export default {
         probeType: 3,
         pullUpLoad: true
       });
+      const elposition = document.querySelector('.out').getBoundingClientRect().y;
+      bs.on('scroll', (p) => {
+
+        console.log(elposition)
+        console.log("y    " + (-p.y))
+        if ((-p.y) > (elposition - 45)) {
+          console.log("ok`````````````````````")
+          isshow.value = true;
+        } else isshow.value = false;
+      });
 
       function handleScroll() {
         // console.log("pulling")
@@ -134,13 +148,20 @@ export default {
 
 
     return {
-      recommend, booklist
+      recommend, booklist, tabref, isshow
     }
   }
 }
 </script>
 
 <style>
+.fixTabcontrol {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+}
+
 .wrapper {
   position: fixed;
   top: 45px;

@@ -1,66 +1,36 @@
 <template>
-  <div class="tabcontrol"  :class="{'isfix' : isFixed}"  :style="{top:toplength+'px'}">
+  <div class="tabcontrol" >
     <div v-for="(option,index) in options " class="option"
          @click="tap(index)"
          :key="option"
-         :class="{active:index==curactive}"><span>{{option}}</span></div>
+         :class="{'active':index==store.state.curtab}"><span>{{option}}</span></div>
   </div>
 </template>
 
 <script>
-  import BScroll from "@better-scroll/core";
+
   import {ref,onMounted} from 'vue';
   import {useStore} from 'vuex'
 export default {
 
 
   props :{
-    toplength:{
-      type: Number,
-      default:0
-    },
     options:{
       type: Array,
       default:()=>[]
     }
   },
-  setup(props,{emit})
+  setup()
   {
     let store=useStore();
-    let curactive=ref(0);
-
+    console.log(curactive.value)
     //点击选项卡切换事件
     let tap=(index)=>{
       curactive.value=index;
       store.commit('changecurtab',index);
-      // console.log(store.state.curtab)
     }
-
-    let isFixed=ref(false);
-
-
-
-    onMounted(()=>{
-
-      let ele=document.querySelector('.tabcontrol');
-      let position=ele.getBoundingClientRect().top;
-      const handleScroll=()=>{
-
-          let scrolltop=window.pageYOffset;
-        if(scrolltop>position-props.toplength)
-        {
-
-          isFixed.value=true;
-        }else
-          isFixed.value=false;
-      }
-
-      window.addEventListener('scroll',handleScroll)
-    })
-
-
     return {
-      ref,curactive,tap,isFixed
+      tap,store
     }
   }
 
@@ -68,11 +38,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .isfix {
-    margin-top: 0;
-    width: calc(100vw - 20px);
-    position: fixed;
-  }
+
   .tabcontrol {
     background: #FFFFFF;
     border: 1px solid rgba(136,136,136,.5) ;

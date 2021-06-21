@@ -16,7 +16,6 @@
 
 import Bookitem from "@/components/common/books/bookitem";
 import {computed, onMounted, reactive, ref, watch, watchEffect} from "vue";
-import {getGoodsList} from "@/network/home";
 import {useStore} from 'vuex'
 
 export default {
@@ -27,24 +26,8 @@ export default {
       default:{}
     }
   },
-  setup(props) {
-    // activeTab='sales';
-    //获取3个书籍数组
-    onMounted(() => {
+  setup() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-    });
     let activeTab=ref('sales');
     let store=useStore();
     let cur=computed(()=>store.state.curtab);
