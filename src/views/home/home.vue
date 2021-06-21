@@ -57,16 +57,15 @@ export default {
     let store = useStore();
     const recommend = ref([]);
     let booklist = reactive({
-      sales: {books: [], index: 1},
-      new: {books: [], index: 1},
-      recommend: {books: [], index: 1},
+      sales: {books: [], index: 0},
+      new: {books: [], index: 0},
+      recommend: {books: [], index: 0},
     });
 
-    let tofix = ref(false);
 
     let t = computed(() => store.state.curtab);
 
-    //更新列表数据
+    //处理上滑事件，更新列表数据
     function updateBookList() {
       let curtabWord = '';
       switch (t.value) {
@@ -80,12 +79,12 @@ export default {
           curtabWord = 'recommend';
           break;
       }
-      // console.log("curbooklist    " + curtabWord)
+      // console.log("当前选项卡    " + curtabWord)
       let curType = booklist[curtabWord];
 
       curType.index++;
       let curindex = curType.index;
-      // console.log('curindex       '+ curindex);
+      console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       getGoodsList(curindex, curtabWord).then(res => {
 
         nextTick(() => {
@@ -99,48 +98,71 @@ export default {
 
 
     onMounted(() => {
+
+      //获取推荐数据
       getHomeData().then((res) => {
             recommend.value = res.goods.data;
           }
       );
 
+      //获取图书列表的初始值
+      function initBookList() {
+        getGoodsList(1, 'sales').then((res) => {
+          booklist.sales.books = res.goods.data;
 
-      getGoodsList(1, 'sales').then((res) => {
-        booklist.sales.books = res.goods.data;
+        });
 
-      });
-      getGoodsList(1, 'recommend').then((res) => {
-        booklist.recommend.books = res.goods.data;
-      });
-      getGoodsList(1, 'new').then((res) => {
-            booklist.new.books = res.goods.data;
-          }
-      )
+        getGoodsList(1, 'recommend').then((res) => {
+          booklist.recommend.books = res.goods.data;
+        });
+        getGoodsList(1, 'new').then((res) => {
+          booklist.new.books = res.goods.data;
+        });
+      }
+
+      initBookList();
 
 
+      //需要声明全面使用上滑插件
       BScroll.use(Pullup);
       let bs = new BScroll(document.querySelector('.wrapper'), {
         click: true,
-        probeType: 3,
-        pullUpLoad: true
+        probeType: 2,
+        pullUpLoad: true,
+
       });
+
+      watch(t, () => {
+        nextTick(() => {
+          console.log('reflash')
+          bs.refresh();
+        })
+      })
+
+      //获取选项卡当前距离视口顶部距离
       const elposition = document.querySelector('.out').getBoundingClientRect().y;
+
+      //监控滚动
       bs.on('scroll', (p) => {
 
-        console.log(elposition)
-        console.log("y    " + (-p.y))
+        // console.log(elposition)
+        // console.log("y    " + (-p.y))
         if ((-p.y) > (elposition - 45)) {
-          console.log("ok`````````````````````")
+          // console.log("ok`````````````````````")
           isshow.value = true;
-        } else isshow.value = false;
+        } else
+          isshow.value = false;
       });
+      let pullupcount = 0;
 
       function handleScroll() {
-        // console.log("pulling")
+        pullupcount++;
+        console.log('上拉刷新次数' + pullupcount);
         updateBookList();
         bs.finishPullUp();
         bs.refresh();
       };
+
 
       bs.on('pullingUp', handleScroll);
 

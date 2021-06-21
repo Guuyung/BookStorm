@@ -28,11 +28,18 @@ export default {
   },
   setup() {
 
+    //初始化展示为热销的图书列表
     let activeTab=ref('sales');
     let store=useStore();
+
+    let a=2;
+    //将vuex里的状态设为计算属性，状态更新时计算属性跟着变
     let cur=computed(()=>store.state.curtab);
+    let temp=computed(()=>a*2);
+
 
     watch([cur,activeTab],()=>{
+
       switch (cur.value) {
         case 0:
           activeTab.value = 'sales';

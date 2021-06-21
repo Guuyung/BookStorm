@@ -23,10 +23,9 @@ export default {
   setup()
   {
     let store=useStore();
-    console.log(curactive.value)
     //点击选项卡切换事件
+
     let tap=(index)=>{
-      curactive.value=index;
       store.commit('changecurtab',index);
     }
     return {
