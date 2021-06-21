@@ -1,36 +1,45 @@
 <template>
   <div>
 
-    <!--      导航栏-->
+    <!--      顶部导航栏-->
     <navigator>
       <template v-slot:default>Book Storm</template>
       <template v-slot:left>
-<!--        用div来占位默认的返回键，首页不需要返回键的显示-->
+        <!--        用div来占位默认的返回键，首页不需要返回键的显示-->
         <div></div>
       </template>
     </navigator>
 
     <!--      banner-->
-    <banner></banner>
+    <div class="wrapper">
 
-    <!--    推荐栏-->
-    <recommend :recommend="recommend"></recommend>
+      <div class="content">
+        <banner></banner>
 
-<!--    控制选项卡-->
-    <tab-control  :toplength="45" :options="['畅销','新书','精选']"  class="tabcontrol"></tab-control>
+        <!--    推荐栏-->
+        <recommend :recommend="recommend"></recommend>
+
+        <!--    控制选项卡-->
+        <tab-control :toplength="45" :options="['畅销','新书','精选']" class="tabcontrol"></tab-control>
 
 
-<!--    书列表-->
-    <booklist class="booklist"></booklist>
+        <!--    书列表-->
+        <booklist class="booklist" :booklist="booklist"></booklist>
+      </div>
+
+    </div>
+
 
   </div>
 </template>
 
 <script>
+import Pullup from '@better-scroll/pull-up'
+import BScroll from '@better-scroll/core'
 import Navigator from "@/components/common/navigator";
 import Banner from "@/views/home/banner";
-import {getHomeData,getGoodsList} from "@/network/home";
-import {ref, reactive,onMounted} from 'vue'
+import {getHomeData, getGoodsList} from "@/network/home";
+import {ref, reactive, onMounted} from 'vue'
 import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
@@ -39,8 +48,11 @@ export default {
   components: {Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
     const recommend = ref([]);
-
-
+    let booklist = reactive({
+      sales: {books: [],index:1},
+      new: {books: [],index:1},
+      recommend: {books: [],index:1},
+    });
 
     onMounted(() => {
       getHomeData().then((res) => {
@@ -48,23 +60,65 @@ export default {
           }
       );
 
+
+      getGoodsList(1, 'sales').then((res) => {
+        booklist.sales.books = res.goods.data;
+        console.log()
+      });
+      getGoodsList(1, 'recommend').then((res) => {
+        booklist.recommend.books = res.goods.data;
+
+      });
+      getGoodsList(1, 'new').then((res) => {
+            booklist.new.books = res.goods.data;
+          }
+      )
+
+
+      BScroll.use(Pullup);
+      let bs = new BScroll(document.querySelector('.wrapper'), {
+        click: true,
+        probeType: 3,
+        pullUpLoad: true
+      });
+
+      function handleScroll() {
+        console.log("pulling")
+
+        bs.finishPullUp();
+        bs.refresh();
+      };
+
+      bs.on('pullingUp', handleScroll);
+
     })
 
 
     return {
-      recommend
+      recommend, booklist
     }
   }
 }
 </script>
 
 <style>
+.wrapper {
+  position: fixed;
+  top: 45px;
+  bottom: 62px;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
 .tabcontrol {
   margin-top: 10px;
 }
+
 .booklist {
-  margin-top: 11px ;
+  margin-top: 11px;
 }
+
 * {
   margin-left: 10px;
   margin-right: 10px;

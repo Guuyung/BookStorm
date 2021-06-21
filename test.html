@@ -8,21 +8,19 @@
     <title>Document</title>
 </head>
 <body>
-    <div>xx</div>
-<script>
 
+<script>
+    async function f()
+    {
+        console.log(1)
+        let msg=await new Promise(());
+        console.log(msg)
+        console.log(2)
+    };
+    f()
 </script>
 <style>
-    body {position: relative}
-    div {
-        background-color: blue;
-        width: 400px;
-        height: 500px;
-        top: 30px;
-        left: 0;
-        right: 0;
-        position: absolute;
-    }
+
 </style>
 </body>
 </html>

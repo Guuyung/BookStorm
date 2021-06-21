@@ -1,13 +1,15 @@
 <template>
 
-    <navbar ></navbar>
+
 <!--  <test></test>-->
+  <navbar ></navbar>
     <div class="navbox">
     </div>
 
 </template>
 
 <script>
+
   import test from './test.vue'
   import navbar from 'components/common/navbar.vue'
   export default {
@@ -16,7 +18,7 @@
 </script>
 
 <style>
-  @import '~assets/css/base.css';
+@import '~assets/css/base.css';
   .a {
     color: var(--color-high-text);
   }

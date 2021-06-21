@@ -50,6 +50,7 @@ export default {
 
 
 .nav {
+
   width: 100%;
   .router-link-exact-active {
 
