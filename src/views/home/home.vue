@@ -39,20 +39,60 @@ import BScroll from '@better-scroll/core'
 import Navigator from "@/components/common/navigator";
 import Banner from "@/views/home/banner";
 import {getHomeData, getGoodsList} from "@/network/home";
-import {ref, reactive, onMounted} from 'vue'
+import {ref, reactive, onMounted, computed, watch, nextTick} from 'vue'
 import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
+import {useStore} from "vuex";
 
 export default {
   components: {Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
+    let store=useStore();
     const recommend = ref([]);
     let booklist = reactive({
       sales: {books: [],index:1},
       new: {books: [],index:1},
       recommend: {books: [],index:1},
     });
+
+
+    let t=computed(()=>store.state.curtab);
+
+    //更新列表数据
+    function updateBookList()
+    {
+      let curtabWord='';
+      switch (t.value)
+      {
+        case 0:
+          curtabWord='sales';
+          break;
+        case 1:
+          curtabWord='new';
+          break;
+        case 2:
+          curtabWord='recommend';
+          break;
+      }
+      // console.log("curbooklist    " + curtabWord)
+      let curType=booklist[curtabWord];
+
+      curType.index++;
+      let curindex=curType.index;
+      // console.log('curindex       '+ curindex);
+      getGoodsList(curindex,curtabWord).then(res=>{
+
+       nextTick(()=>{
+         curType.books=curType.books.concat(res.goods.data);
+       })
+
+
+      })
+
+    }
+
+
 
     onMounted(() => {
       getHomeData().then((res) => {
@@ -63,11 +103,10 @@ export default {
 
       getGoodsList(1, 'sales').then((res) => {
         booklist.sales.books = res.goods.data;
-        console.log()
+
       });
       getGoodsList(1, 'recommend').then((res) => {
         booklist.recommend.books = res.goods.data;
-
       });
       getGoodsList(1, 'new').then((res) => {
             booklist.new.books = res.goods.data;
@@ -83,8 +122,8 @@ export default {
       });
 
       function handleScroll() {
-        console.log("pulling")
-
+        // console.log("pulling")
+        updateBookList();
         bs.finishPullUp();
         bs.refresh();
       };

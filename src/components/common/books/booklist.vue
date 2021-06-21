@@ -1,7 +1,7 @@
 <template>
   <div class="booklist">
 
-    <bookitem v-for="book in booklist[activeTab].books" :key="book.id"
+    <bookitem v-for="book in booklist[activeTab].books" :key="book"
               :title="book.title"
               :price="book.price"
               :collect-num="book.collects_count"

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import BScroll from "@better-scroll/core";
   import {ref,onMounted} from 'vue';
   import {useStore} from 'vuex'
 export default {
