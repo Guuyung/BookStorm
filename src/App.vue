@@ -1,23 +1,23 @@
 <template>
 
 
-<!--  <test></test>-->
+<!--  <test ref="te" @click="test" age-time="通天塔xxx"></test>-->
   <navbar ></navbar>
     <div class="navbox">
     </div>
-
 </template>
 
 <script>
 
   import test from './test.vue'
   import navbar from 'components/common/navbar.vue'
+  import {onMounted, reactive, ref} from "vue";
   export default {
-    components:{test,navbar}
+    components:{test,navbar},
   }
 </script>
 
-<style>
+<style scoped>
 @import '~assets/css/base.css';
   .a {
     color: var(--color-high-text);

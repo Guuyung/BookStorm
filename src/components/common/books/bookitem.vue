@@ -1,12 +1,14 @@
 <template>
-  <div class="bookitem">
-    <img :src="imgsrc" class="bookimg">
+  <div class="bookitem" >
+    <div class="imgbox">
+      <img :src="imgsrc" class="bookimg">
+    </div>
 
-    <div class="info">
+   <div class="info">
 
       <div class="title">{{title}}</div>
 
-    <div class="price">￥ {{price}}</div>
+   <div class="price">￥ {{price}}</div>
 
     <div class="collection">
       收藏数
@@ -50,11 +52,18 @@ export default {
     position: relative;
 
     width: 46%;
-    .bookimg {
+    height: 36vh;
+    .imgbox {
       width: 100%;
       height: 70%;
       border-radius: 5px;
+      .bookimg {
+        width: 100%;
+        height: 100%;
+      }
     }
+
+
 
     .info{
       display: flex;

@@ -33,6 +33,7 @@
 
     </div>
 
+    <toup></toup>
 
   </div>
 </template>
@@ -48,9 +49,10 @@ import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
 import {useStore} from "vuex";
+import Toup from "@/components/common/toup";
 
 export default {
-  components: {Booklist, TabControl, Recommend, Banner, Navigator},
+  components: {Toup, Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
     let isshow = ref(false);
     let tabref = ref(null);
@@ -88,7 +90,8 @@ export default {
       getGoodsList(curindex, curtabWord).then(res => {
 
         nextTick(() => {
-          curType.books = curType.books.concat(res.goods.data);
+          console.log(res.goods.data)
+          curType.books.push(...(res.goods.data));
         })
 
 
@@ -176,7 +179,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .fixTabcontrol {
   position: fixed;
   top: 45px;
@@ -201,9 +204,6 @@ export default {
   margin-top: 11px;
 }
 
-* {
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 
 </style>
