@@ -1,10 +1,29 @@
 <template>
-  <div class="toup">
+  <div class="toup" @click="toTop" v-show="isshow">
   </div>
 </template>
 
 <script>
+import emitter from "@/utils/eventBus";
+import {ref} from "vue";
 export default {
+  setup()
+  {
+    let isshow=ref(false);
+    const toTop=()=>{
+      emitter.emit('toTop');
+    }
+    emitter.on('onscroll',(p)=>{
+      if((-p.y)>1000)
+        isshow.value=true;
+      else
+        isshow.value=false;
+    })
+    return {
+      toTop,
+      isshow
+    }
+  }
 }
 </script>
 

@@ -17,7 +17,7 @@
             @myscroll="onScroll" @pullingUp="onpullup" ref="scrollel">
 
 
-      <banner></banner>
+      <HomeSwiper :banner="banner"></HomeSwiper>
 
       <!--    推荐栏-->
       <recommend :recommend="recommend"></recommend>
@@ -35,14 +35,13 @@
 
 
     <!--    坐火箭-->
-    <toup v-show="showtop" @click="toTop"></toup>
+    <toup></toup>
 
   </div>
 </template>
 
 <script>
 import Navigator from "@/components/common/navigator";
-import Banner from "@/views/home/banner";
 import {getHomeData, getGoodsList} from "@/network/home";
 import {ref, reactive, onMounted, computed, watch, nextTick} from 'vue'
 import Recommend from "@/views/home/recommend";
@@ -53,6 +52,7 @@ import Toup from "@/components/common/toup";
 import Scroll from "@/components/common/scroll";
 import emitter from "@/utils/eventBus";
 import {debounce} from "@/utils/debounce";
+import HomeSwiper from "@/views/home/homeSwiper";
 
 export default {
   methods: {
@@ -60,9 +60,9 @@ export default {
       console.log('get pullup``````````````````````')
     }
   },
-  components: {Scroll, Toup, Booklist, TabControl, Recommend, Banner, Navigator},
+  components: {HomeSwiper, Scroll, Toup, Booklist, TabControl, Recommend, Navigator},
   setup() {
-    let showtop=ref(false);
+    let banner=ref([]);
     let scrollel = ref(null);
     let isshow = ref(false);
     let tabref = ref(null);
@@ -96,55 +96,44 @@ export default {
       let curindex = curType.index;
       // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       getGoodsList(curindex, curtabWord).then(res => {
-
-        nextTick(() => {
-          console.log(res.goods.data)
-          curType.books.push(...(res.goods.data));
-        })
-
+        curType.books.push(...(res.goods.data));
 
       })
-
     }
 
     let onScroll = (p) => {
       console.log(-p.y)
       if ((-p.y) > (elposition - 50)) {
+        console.log("OK_______________________")
+        console.log(elposition)
         isshow.value = true;
       } else
         isshow.value = false;
-
-      if((-p.y)>1000)
-      {
-        console.log('ok')
-        showtop.value=true;
-      }
-      else
-        showtop.value=false;
-
-
-
     };
-    let deupdate = debounce(updateBookList,50);
+
+    let deupdate = debounce(updateBookList, 50);
 
     let onpullup = () => {
       deupdate();
-      console.log(scrollel.value)
-      scrollel && scrollel.value.refresh();
+
+      nextTick(() => {
+        scrollel && scrollel.value.refresh();
+      })
     };
 
-    const toTop=()=>{
-      console.log(scrollel.value)
-      console.log((scrollel.value).scrollTo)
-      scrollel&&(scrollel.value.bscroll).scrollTo(0,0,500);
-    }
+
     let elposition = 0;
 
     onMounted(() => {
       let n = 1;
       emitter.on('imgloaded', () => {
+        scrollel && scrollel.value.refresh();
         if (n % 10 == 0) {
           scrollel && scrollel.value.refresh();
+          if(!elposition)
+          {
+            elposition=tabref.value.getBoundingClientRect().y;
+          }
         }
         n++;
       })
@@ -152,6 +141,7 @@ export default {
       //获取推荐数据
       getHomeData().then((res) => {
             recommend.value = res.goods.data;
+            banner.value=res.slides;
           }
       );
 
@@ -172,6 +162,7 @@ export default {
       initBookList();
 
 
+      //优化滑动一半切换选项卡
       watch(t, () => {
 
         nextTick(() => {
@@ -179,7 +170,10 @@ export default {
         })
       })
 
-      elposition = document.querySelector('.out').getBoundingClientRect().y;
+        //
+        // elposition = document.querySelector('.out').getBoundingClientRect().y;
+        // console.log(elposition)
+        //
 
     })
 
@@ -192,8 +186,8 @@ export default {
       scrollel,
       onScroll,
       onpullup,
-      showtop,
-      toTop
+      banner
+
     }
   }
 }

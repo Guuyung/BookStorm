@@ -1,6 +1,12 @@
 <template>
 
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <transition>
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </transition>
+  </router-view>
   <div class="nav">
 
     <router-link to="/" class="item">
@@ -18,7 +24,9 @@
 
 
     <router-link to="/shopcart" class="item">
-      <i class="iconfont icon-biaoqianA01_gouwuche-59"></i>
+      <van-badge :content="20" max="9" style="top: 10px !important;">
+        <i class="iconfont icon-biaoqianA01_gouwuche-59"></i>
+      </van-badge>
       <div>购物车</div>
     </router-link>
 

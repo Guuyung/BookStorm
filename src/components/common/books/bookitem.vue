@@ -32,7 +32,7 @@ export default {
       emitter.emit('imgloaded');
     }
 
-    const imgload = debounce(loaded
+    let imgload = debounce(loaded
         ,100
     )
 

@@ -11,7 +11,14 @@ import {debounce} from "@/utils/debounce";
 import Pullup from '@better-scroll/pull-up'
 import BScroll from '@better-scroll/core'
 import {nextTick, onMounted, reactive, ref, watch} from "vue";
+import emitter from "@/utils/eventBus";
 export default {
+  created()
+  {
+    emitter.on('toTop',()=>{
+      this.bscroll.scrollTo(0,0,500);
+    })
+  },
   props:{
     probeType:{
       type:Number,
@@ -30,7 +37,8 @@ export default {
     refresh()
     {
       this.bscroll.refresh();
-    }
+    },
+
   },
   data()
   {
@@ -49,13 +57,12 @@ export default {
     this.bscroll=bs;
     //监控滚动
     bs.on('scroll', (p) => {
-      console.log('fa sc')
       this.$emit('myscroll',p);
-
+      //同时向其他组件发射滚动信号与位置信息
+      emitter.emit('onscroll',p);
     });
 
     bs.on('pullingUp',()=>{
-      console.log('fa pu');
       this.$emit('pullingUp');
       bs.finishPullUp();
     });
