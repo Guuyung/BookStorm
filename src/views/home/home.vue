@@ -1,6 +1,6 @@
 <template>
   <div>
-aaad
+
     <!--      顶部导航栏-->
     <navigator>
       <template v-slot:default>Book Storm</template>
@@ -13,34 +13,34 @@ aaad
     <tab-control class="fixTabcontrol" :options="['畅销','新书','精选']" v-show="isshow"></tab-control>
 
 
-    <!--      banner-->
-    <div class="wrapper">
+    <scroll :probe-type="3" :pull-up-load="true" :click="true"
+            @myscroll="onScroll" @pullingUp="onpullup" ref="scrollel">
 
-      <div class="content">
-        <banner></banner>
 
-        <!--    推荐栏-->
-        <recommend :recommend="recommend"></recommend>
+      <banner></banner>
 
-        <div ref="tabref" class="out" >
-          <!--    控制选项卡-->
-          <tab-control :options="['畅销','新书','精选']" class="tabcontrol" :style="{visibility:isshow?'hidden':'visible'}"></tab-control>
-        </div>
+      <!--    推荐栏-->
+      <recommend :recommend="recommend"></recommend>
 
-        <!--    书列表-->
-        <booklist class="booklist" :booklist="booklist"></booklist>
+      <div ref="tabref" class="out">
+        <!--    控制选项卡-->
+        <tab-control :options="['畅销','新书','精选']" class="tabcontrol"
+                     :style="{visibility:isshow?'hidden':'visible'}"></tab-control>
       </div>
 
-    </div>
+      <!--    书列表-->
+      <booklist class="booklist" :booklist="booklist"></booklist>
 
-    <toup></toup>
+    </scroll>
+
+
+    <!--    坐火箭-->
+    <toup v-show="showtop" @click="toTop"></toup>
 
   </div>
 </template>
 
 <script>
-import Pullup from '@better-scroll/pull-up'
-import BScroll from '@better-scroll/core'
 import Navigator from "@/components/common/navigator";
 import Banner from "@/views/home/banner";
 import {getHomeData, getGoodsList} from "@/network/home";
@@ -50,10 +50,20 @@ import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
 import {useStore} from "vuex";
 import Toup from "@/components/common/toup";
+import Scroll from "@/components/common/scroll";
+import emitter from "@/utils/eventBus";
+import {debounce} from "@/utils/debounce";
 
 export default {
-  components: {Toup, Booklist, TabControl, Recommend, Banner, Navigator},
+  methods: {
+    onpullup() {
+      console.log('get pullup``````````````````````')
+    }
+  },
+  components: {Scroll, Toup, Booklist, TabControl, Recommend, Banner, Navigator},
   setup() {
+    let showtop=ref(false);
+    let scrollel = ref(null);
     let isshow = ref(false);
     let tabref = ref(null);
     let store = useStore();
@@ -63,7 +73,6 @@ export default {
       new: {books: [], index: 0},
       recommend: {books: [], index: 0},
     });
-
 
     let t = computed(() => store.state.curtab);
 
@@ -81,12 +90,11 @@ export default {
           curtabWord = 'recommend';
           break;
       }
-      // console.log("当前选项卡    " + curtabWord)
       let curType = booklist[curtabWord];
 
       curType.index++;
       let curindex = curType.index;
-      console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
+      // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       getGoodsList(curindex, curtabWord).then(res => {
 
         nextTick(() => {
@@ -99,8 +107,47 @@ export default {
 
     }
 
+    let onScroll = (p) => {
+      console.log(-p.y)
+      if ((-p.y) > (elposition - 50)) {
+        isshow.value = true;
+      } else
+        isshow.value = false;
+
+      if((-p.y)>1000)
+      {
+        console.log('ok')
+        showtop.value=true;
+      }
+      else
+        showtop.value=false;
+
+
+
+    };
+    let deupdate = debounce(updateBookList,50);
+
+    let onpullup = () => {
+      deupdate();
+      console.log(scrollel.value)
+      scrollel && scrollel.value.refresh();
+    };
+
+    const toTop=()=>{
+      console.log(scrollel.value)
+      console.log((scrollel.value).scrollTo)
+      scrollel&&(scrollel.value.bscroll).scrollTo(0,0,500);
+    }
+    let elposition = 0;
 
     onMounted(() => {
+      let n = 1;
+      emitter.on('imgloaded', () => {
+        if (n % 10 == 0) {
+          scrollel && scrollel.value.refresh();
+        }
+        n++;
+      })
 
       //获取推荐数据
       getHomeData().then((res) => {
@@ -112,7 +159,6 @@ export default {
       function initBookList() {
         getGoodsList(1, 'sales').then((res) => {
           booklist.sales.books = res.goods.data;
-
         });
 
         getGoodsList(1, 'recommend').then((res) => {
@@ -126,58 +172,28 @@ export default {
       initBookList();
 
 
-      //需要声明全面使用上滑插件
-      BScroll.use(Pullup);
-      let bs = new BScroll(document.querySelector('.wrapper'), {
-        click: true,
-        probeType: 2,
-        pullUpLoad: true,
-
-      });
-      store.state.scroll=bs;
-      console.log( store.state.scroll)
       watch(t, () => {
-        // console.log(bs.scrollerHeight)
-        nextTick(() => {
-          // console.log('reflash')
-          // bs.refresh();
-          // console.log(bs.scrollerHeight)
 
+        nextTick(() => {
+          scrollel && scrollel.value.refresh();
         })
       })
 
-      //获取选项卡当前距离视口顶部距离
-      const elposition = document.querySelector('.out').getBoundingClientRect().y;
-
-      //监控滚动
-      bs.on('scroll', (p) => {
-
-        if ((-p.y) > (elposition - 50)) {
-          isshow.value = true;
-        } else
-          isshow.value = false;
-      });
-      let pullupcount = 0;
-
-      function handleScroll() {
-        pullupcount++;
-        // console.log('上拉刷新次数' + pullupcount);
-        updateBookList();
-        // console.log(bs.scrollerHeight)
-        bs.finishPullUp();
-        // bs.refresh();
-        // console.log(bs.scrollerHeight)
-
-      };
-
-
-      bs.on('pullingUp', handleScroll);
+      elposition = document.querySelector('.out').getBoundingClientRect().y;
 
     })
 
 
     return {
-      recommend, booklist, tabref, isshow
+      recommend,
+      booklist,
+      tabref,
+      isshow,
+      scrollel,
+      onScroll,
+      onpullup,
+      showtop,
+      toTop
     }
   }
 }
@@ -191,14 +207,6 @@ export default {
   right: 0;
 }
 
-.wrapper {
-  position: fixed;
-  top: 45px;
-  bottom: 62px;
-  left: 0;
-  right: 0;
-  z-index: 0;
-}
 
 .tabcontrol {
   /*margin-top: 10px;*/
@@ -207,7 +215,6 @@ export default {
 .booklist {
   margin-top: 11px;
 }
-
 
 
 </style>

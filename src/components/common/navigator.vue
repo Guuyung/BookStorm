@@ -33,7 +33,8 @@ export default {
 
 <style scoped lang="scss">
 .container {
-
+  position: relative;
+  z-index: 2;
   height: 45px;
   background-color: var(--color-tint);
   display: flex;

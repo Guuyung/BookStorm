@@ -1,7 +1,9 @@
 <template>
 
 
-<!--  <test ref="te" @click="test" age-time="通天塔xxx"></test>-->
+<!--  <test></test>-->
+
+
   <navbar ></navbar>
     <div class="navbox">
     </div>

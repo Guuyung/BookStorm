@@ -1,20 +1,21 @@
 <template>
-  <div class="bookitem" >
+  <div class="bookitem">
     <div class="imgbox">
+
       <img :src="imgsrc" class="bookimg" @load="imgload">
     </div>
 
-   <div class="info">
+    <div class="info">
 
-      <div class="title">{{title}}</div>
+      <div class="title">{{ title }}</div>
 
-   <div class="price">￥ {{price}}</div>
+      <div class="price">￥ {{ price }}</div>
 
-    <div class="collection">
-      收藏数
-      <img src="~assets/images/collect.png" alt="">
-      <span class="collectnum">{{collectNum}}</span>
-    </div>
+      <div class="collection">
+        收藏数
+        <img src="~assets/images/collect.png" alt="">
+        <span class="collectnum">{{ collectNum }}</span>
+      </div>
 
     </div>
 
@@ -22,34 +23,40 @@
 </template>
 
 <script>
-export default {
-  methods:{
-    imgload()
-    {
-      let sc=this.$store.state.scroll;
-      console.log('前    '+sc.scrollerHeight);
-      this.$store.state.scroll.refresh();
-      console.log('refresh..........');
-      console.log('后    '+sc.scrollerHeight);
+import {debounce} from "@/utils/debounce";
+import emitter from "@/utils/eventBus";
 
+export default {
+  setup() {
+    function loaded() {
+      emitter.emit('imgloaded');
+    }
+
+    const imgload = debounce(loaded
+        ,100
+    )
+
+    return {
+      imgload
     }
   },
-  props:{
-    imgsrc:{
-      type:String,
-      default:""
+
+  props: {
+    imgsrc: {
+      type: String,
+      default: ""
     },
-    price:{
-      type:Number,
-      default:0
+    price: {
+      type: Number,
+      default: 0
     },
-    title:{
-      type:String,
-      default:""
+    title: {
+      type: String,
+      default: ""
     },
-    collectNum:{
-      type:Number,
-      default:0
+    collectNum: {
+      type: Number,
+      default: 0
     }
 
   }
@@ -59,68 +66,63 @@ export default {
 
 <style scoped lang="scss">
 
-  .bookitem {
-    position: relative;
+.bookitem {
+  position: relative;
 
-    width: 46%;
-    height: 36vh;
-    .imgbox {
+  width: 46%;
+  height: 36vh;
+
+  .imgbox {
+    width: 100%;
+    height: 70%;
+    border-radius: 5px;
+
+    .bookimg {
       width: 100%;
-      height: 70%;
-      border-radius: 5px;
-      .bookimg {
-        width: 100%;
-        height: 100%;
-      }
+      height: 100%;
+    }
+  }
+
+
+  .info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    .title {
+      text-align: center;
+      width: 100%;
+      display: block;
+      padding: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
+    .price {
+      text-align: center;
+      color: red;
+      padding: 5px
+    }
 
+    .collection {
+      text-align: center;
 
-    .info{
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
+      img {
+        margin: 0px 3px;
+        width: 14px;
 
-      .title {
-        text-align: center;
-        width: 100%;
-        display: block;
-        padding: 3px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
 
-      .price {
-        text-align: center;
-        color: red;
-        padding: 5px
-      }
 
-      .collection {
-        text-align: center;
-
-        img {
-          margin: 0px 3px;
-          width: 14px;
-
-        }
-
-
-        .collectnum {
-          padding-left: 5px ;
-        }
-
+      .collectnum {
+        padding-left: 5px;
       }
 
     }
-
-
-
-
-
-
-
 
   }
+
+
+}
 </style>
