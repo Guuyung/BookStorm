@@ -33,10 +33,7 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+
   height: 45px;
   background-color: var(--color-tint);
   display: flex;
@@ -46,7 +43,6 @@ export default {
   text-align: center;
   font-size: 20px;
   box-shadow: 0 3px 11px #888888;
-  z-index: 2;
 }
 
 .left img {

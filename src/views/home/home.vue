@@ -1,6 +1,6 @@
 <template>
   <div>
-
+aaad
     <!--      顶部导航栏-->
     <navigator>
       <template v-slot:default>Book Storm</template>
@@ -22,9 +22,9 @@
         <!--    推荐栏-->
         <recommend :recommend="recommend"></recommend>
 
-        <div ref="tabref" class="out" v-show="!isshow">
+        <div ref="tabref" class="out" >
           <!--    控制选项卡-->
-          <tab-control :options="['畅销','新书','精选']" class="tabcontrol"></tab-control>
+          <tab-control :options="['畅销','新书','精选']" class="tabcontrol" :style="{visibility:isshow?'hidden':'visible'}"></tab-control>
         </div>
 
         <!--    书列表-->
@@ -134,11 +134,15 @@ export default {
         pullUpLoad: true,
 
       });
-
+      store.state.scroll=bs;
+      console.log( store.state.scroll)
       watch(t, () => {
+        // console.log(bs.scrollerHeight)
         nextTick(() => {
-          console.log('reflash')
-          bs.refresh();
+          // console.log('reflash')
+          // bs.refresh();
+          // console.log(bs.scrollerHeight)
+
         })
       })
 
@@ -148,10 +152,7 @@ export default {
       //监控滚动
       bs.on('scroll', (p) => {
 
-        // console.log(elposition)
-        // console.log("y    " + (-p.y))
-        if ((-p.y) > (elposition - 45)) {
-          // console.log("ok`````````````````````")
+        if ((-p.y) > (elposition - 50)) {
           isshow.value = true;
         } else
           isshow.value = false;
@@ -160,10 +161,13 @@ export default {
 
       function handleScroll() {
         pullupcount++;
-        console.log('上拉刷新次数' + pullupcount);
+        // console.log('上拉刷新次数' + pullupcount);
         updateBookList();
+        // console.log(bs.scrollerHeight)
         bs.finishPullUp();
-        bs.refresh();
+        // bs.refresh();
+        // console.log(bs.scrollerHeight)
+
       };
 
 
@@ -197,7 +201,7 @@ export default {
 }
 
 .tabcontrol {
-  margin-top: 10px;
+  /*margin-top: 10px;*/
 }
 
 .booklist {

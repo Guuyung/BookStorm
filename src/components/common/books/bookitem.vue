@@ -1,7 +1,7 @@
 <template>
   <div class="bookitem" >
     <div class="imgbox">
-      <img :src="imgsrc" class="bookimg">
+      <img :src="imgsrc" class="bookimg" @load="imgload">
     </div>
 
    <div class="info">
@@ -23,6 +23,17 @@
 
 <script>
 export default {
+  methods:{
+    imgload()
+    {
+      let sc=this.$store.state.scroll;
+      console.log('前    '+sc.scrollerHeight);
+      this.$store.state.scroll.refresh();
+      console.log('refresh..........');
+      console.log('后    '+sc.scrollerHeight);
+
+    }
+  },
   props:{
     imgsrc:{
       type:String,
