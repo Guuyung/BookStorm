@@ -8,10 +8,8 @@
 </template>
 
 <script>
-import {debounce} from "@/utils/debounce";
 import Pullup from '@better-scroll/pull-up'
 import BScroll from '@better-scroll/core'
-import {nextTick, onMounted, reactive, ref, watch} from "vue";
 import emitter from "@/utils/eventBus";
 export default {
   created()
@@ -47,7 +45,7 @@ export default {
     },
     pullUpLoad:{
       type:Boolean,
-      default: false
+      default: true
     }
   },
   methods:{
@@ -60,7 +58,8 @@ export default {
   data()
   {
     return {
-      bscroll:null
+      bscroll:null,
+      age:18
     }
   },
   mounted() {

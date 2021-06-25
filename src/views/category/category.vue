@@ -1,64 +1,68 @@
 <template>
 
-    <!--      导航栏-->
-    <navigator>分类</navigator>
+  <!--      导航栏-->
+  <navigator>分类</navigator>
 
 
+  <van-sidebar v-model="activeKey" class="left">
 
-      <van-sidebar v-model="activeKey" class="left">
+    <van-collapse v-model="activeName" accordion class="lefttab">
+      <van-collapse-item :title="cate.name" v-for="cate in catelist" :key="cate.id" class="clapitem">
 
-        <van-collapse v-model="activeName" accordion class="lefttab">
-          <van-collapse-item :title="cate.name" v-for="cate in catelist" :key="cate.id" class="clapitem">
+        <van-sidebar-item :title="son.name" v-for="son in cate.children" :key="son.id"
+                          @click="clickCateTab(son.id)"/>
 
-            <van-sidebar-item :title="son.name" v-for="son in cate.children" :key="son.id"
-                              @click="clickCateTab(son.id)"/>
-
-          </van-collapse-item>
-        </van-collapse>
-
-
-      </van-sidebar>
+      </van-collapse-item>
+    </van-collapse>
 
 
+  </van-sidebar>
 
-        <div class="tab">
-          <van-tabs v-model="active" @click="clicktab">
-            <van-tab title="销量排序"></van-tab>
-            <van-tab title="价格排序"></van-tab>
-            <van-tab title="评价排序"></van-tab>
-          </van-tabs>
-        </div>
+
+  <div class="tab">
+    <van-tabs v-model="active" @click="clicktab">
+      <van-tab title="销量排序"></van-tab>
+      <van-tab title="价格排序"></van-tab>
+      <van-tab title="评价排序"></van-tab>
+    </van-tabs>
+  </div>
 
 
   <scroll :top="85"
-  :left="120"
-  :right="0"
-  :bottom="62"
-  :pull-up-load="true" ref="">
+          :left="120"
+          :right="0"
+          :bottom="62"
+          :click="true"
+          @pullingUp="update"
+          :probe-type="3"
+          ref="scroll">
 
-        <div class="list">
-          <van-card
-              v-for="item in goods[curtab].list"
-              :key="item.id"
-              :price="item.price"
-              :title="item.title"
-              :thumb="item.cover_url"
-          />
-        </div>
+    <div class="list">
+      <van-card
+          v-for="item in goods[curtab].list"
+          :key="item.id"
+          :price="item.price"
+          :title="item.title"
+          :thumb="item.cover_url"
+      />
+    </div>
 
   </scroll>
-
+    <toup></toup>
 </template>
 
 <script>
+import emitter from "@/utils/eventBus";
 import {getCateGoods, getCategory} from "@/network/category";
 import Navigator from "@/components/common/navigator";
-import {onMounted, reactive, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
 import scroll from "@/components/common/scroll";
+import Toup from "@/components/common/toup";
 
 export default {
-  components: {Navigator,scroll},
-  setup: function () {
+  components: {Toup, Navigator, scroll},
+  setup(){
+    let scroll = ref(null);
     let activeName = ref('');
     let activeKey = ref('')
     let catelist = ref([]);
@@ -74,6 +78,19 @@ export default {
       comments: {page: 1, list: []}
     })
 
+
+    //上拉刷新
+      const update = () => {
+        console.log(123)
+      let page = ++(goods[curtab.value].page);
+      getCateGoods(curtab.value, page, curcate.value).then(res => {
+        goods[curtab.value].list.push(...(res.goods.data));
+        nextTick(() => {
+          scroll.value.refresh();
+        })
+      })
+    }
+
     //获取分类信息列表
     getCategory().then((res) => {
       catelist.value = res.categories;
@@ -84,6 +101,9 @@ export default {
     {
       getCateGoods().then(res => {
         goods.sales.list = res.goods.data;
+        nextTick(() => {
+          scroll.value.refresh();
+        })
       });
       getCateGoods('price').then(res => {
         goods.price.list = res.goods.data;
@@ -99,11 +119,13 @@ export default {
     //切换排序分类
     const clicktab = (index) => {
       curtab.value = tabs[index];
-
-      console.log('goods  ' + curcate.value+'排序  '+curtab.value)
-      let page = goods[curtab.value].page;
-      getCateGoods(curtab.value, page, curcate.value).then(res => {
+      goods[curtab.value].page=1;
+      console.log('goods  ' + curcate.value + '排序  ' + curtab.value)
+      getCateGoods(curtab.value, 1, curcate.value).then(res => {
         goods[curtab.value].list = res.goods.data;
+        nextTick(() => {
+          scroll.value.refresh();
+        })
       });
     }
 
@@ -111,15 +133,20 @@ export default {
     const clickCateTab = (id) => {
 
       curcate.value = id;
-      let page = goods[curtab.value].page;
-      getCateGoods(curtab.value, page, id).then(res => {
+      goods[curtab.value].page=1;
+      getCateGoods(curtab.value, 1, id).then(res => {
         goods[curtab.value].list = res.goods.data;
+        nextTick(() => {
+          scroll.value.refresh();
+        })
       });
-      console.log('goods  ' + curcate.value+'排序  '+curtab.value)
+      console.log('goods  ' + curcate.value + '排序  ' + curtab.value)
     }
 
     return {
-      activeName, activeKey, catelist, active, clicktab, clickCateTab, goods, curtab
+      activeName, activeKey, catelist, active, clicktab, clickCateTab, goods, curtab,
+      scroll,
+      update
     }
   }
 }
@@ -128,34 +155,29 @@ export default {
 <style scoped lang="scss">
 
 
+.left {
+  float: left;
+  width: 120px;
+  height: calc(100vh - 107px);
 
-  .left {
-    float: left;
-    width: 120px;
-    height: calc(100vh - 107px);
-
-    .lefttab {
-      margin-top: 40px;
-    }
-
+  .lefttab {
+    margin-top: 40px;
   }
 
+}
 
 
+.tab {
+  position: relative;
+  z-index: 1;
+  float: left;
+  height: 40px;
+  width: calc(100vw - 120px);
+}
 
-    .tab {
-      position: relative;
-      z-index: 1;
-      float: left;
-      height: 40px;
-     width: calc(100vw - 120px);
-    }
-
-    .list {
-      width: 100%;
-    }
-
-
+.list {
+  width: 100%;
+}
 
 
 </style>

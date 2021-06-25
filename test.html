@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<script>
+
+
+    let a=[];
+    a[1]=1;
+    a[2]=1;
+    function f(n)
+    {
+        let pre=1;let aft=1;
+        let cur=0;
+        for(let i=3;i<=n;i++)
+        {
+            cur=pre+aft;
+            pre=aft;
+            aft=cur;
+
+        }
+        return cur;
+    }
+    function q(n)
+    {
+        if(n==1||n==2)return 1;
+        return q(n-1)+q(n-2);
+    }
+    console.log(f(10));
+    alert(f(10))
+
+</script>
+
+</body>
+</html>

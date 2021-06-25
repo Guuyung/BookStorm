@@ -21,7 +21,7 @@
         :bottom="62"
         :left="0"
         :right="0"
-            @myscroll="onScroll"
+        @myscroll="onScroll"
         @pullingUp="onpullup"
         ref="scrollel">
 
@@ -66,7 +66,7 @@ import HomeSwiper from "@/views/home/homeSwiper";
 export default {
   components: {HomeSwiper, Scroll, Toup, Booklist, TabControl, Recommend, Navigator},
   setup() {
-    let banner=ref([]);
+    let banner = ref([]);
     let scrollel = ref(null);
     let isshow = ref(false);
     let tabref = ref(null);
@@ -101,7 +101,7 @@ export default {
       // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       getGoodsList(curindex, curtabWord).then(res => {
         curType.books.push(...(res.goods.data));
-        scrollel && scrollel.value.refresh();
+        nextTick(() => scrollel && scrollel.value.refresh())
       })
     }
 
@@ -111,7 +111,6 @@ export default {
         isshow.value = true;
       } else
         isshow.value = false;
-
 
     };
 
@@ -129,22 +128,19 @@ export default {
     onMounted(() => {
       let n = 1;
       emitter.on('imgloaded', () => {
-        scrollel && scrollel.value.refresh();
         if (n % 10 == 0) {
-          if(!elposition)
-          {
-            elposition=tabref.value.getBoundingClientRect().y;
+          if (!elposition) {
+            elposition = tabref.value.getBoundingClientRect().y;
           }
         }
         n++;
       })
 
 
-
       //获取推荐数据
       getHomeData().then((res) => {
             recommend.value = res.goods.data;
-            banner.value=res.slides;
+            banner.value = res.slides;
           }
       );
 
@@ -163,7 +159,6 @@ export default {
       }
 
       initBookList();
-
 
 
       //优化滑动一半切换选项卡
