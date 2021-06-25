@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper" ref="wrapperref">
+  <div class="wrapper" ref="wrapperref"
+       :style="{top:top+'px',left:left+'px',right:right+'px',bottom:bottom+'px'}">
   <div class="content">
     <slot></slot>
   </div>
@@ -20,6 +21,22 @@ export default {
     })
   },
   props:{
+    top:{
+      type:Number,
+      require:true
+    },
+    left:{
+      type:Number,
+      require:true
+    },
+    right:{
+      type:Number,
+      require:true
+    },
+    bottom:{
+      type:Number,
+      require:true
+    },
     probeType:{
       type:Number,
       default:1

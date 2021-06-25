@@ -1,31 +1,25 @@
 <template>
-  <div>
-    <button @click="inc"> clk</button>
-    {{data}}
-  </div>
+  <div v-for="item in a">a:{{item.name}}</div>
+
+  <button @click="a[0]++">x</button>
 </template>
 
 <script>
-import {debounce} from "@/utils/debounce";
 import {ref} from "vue";
+
 export default {
-
-  data()
-  {
-    return {
-
-    }
-  },
   created() {
 
   },
   setup() {
-    let data=ref(0);
-    let inc=debounce(()=>{data.value++},200);
-    return {
-      inc,data
+    let a=ref([] );
+    setTimeout(()=>{
+      a.value[0]={name:'yang'};
+      a.value[1]={name:'co'};
+
+    },2000)
+    return{a}
     }
-  }
 }
 </script>
 

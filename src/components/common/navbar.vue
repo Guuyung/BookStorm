@@ -24,9 +24,10 @@
 
 
     <router-link to="/shopcart" class="item">
-      <van-badge :content="20" max="9" style="top: 10px !important;">
-        <i class="iconfont icon-biaoqianA01_gouwuche-59"></i>
+      <van-badge :content="20" max="9" style="position:fixed !important;">
       </van-badge>
+      <i class="iconfont icon-biaoqianA01_gouwuche-59"></i>
+
       <div>购物车</div>
     </router-link>
 
@@ -61,7 +62,7 @@ export default {
 
   width: 100%;
   .router-link-exact-active {
-
+    height:40px;
     color: var(--color-high-text);
   }
 ;

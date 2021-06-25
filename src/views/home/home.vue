@@ -13,8 +13,17 @@
     <tab-control class="fixTabcontrol" :options="['畅销','新书','精选']" v-show="isshow"></tab-control>
 
 
-    <scroll :probe-type="3" :pull-up-load="true" :click="true"
-            @myscroll="onScroll" @pullingUp="onpullup" ref="scrollel">
+    <scroll
+        :probe-type="3"
+        :pull-up-load="true"
+        :click="true"
+        :top="45"
+        :bottom="62"
+        :left="0"
+        :right="0"
+            @myscroll="onScroll"
+        @pullingUp="onpullup"
+        ref="scrollel">
 
 
       <HomeSwiper :banner="banner"></HomeSwiper>
@@ -43,7 +52,7 @@
 <script>
 import Navigator from "@/components/common/navigator";
 import {getHomeData, getGoodsList} from "@/network/home";
-import {ref, reactive, onMounted, computed, watch, nextTick} from 'vue'
+import {ref, reactive, onMounted, computed, watch, nextTick, watchEffect} from 'vue'
 import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
@@ -55,11 +64,6 @@ import {debounce} from "@/utils/debounce";
 import HomeSwiper from "@/views/home/homeSwiper";
 
 export default {
-  methods: {
-    onpullup() {
-      console.log('get pullup``````````````````````')
-    }
-  },
   components: {HomeSwiper, Scroll, Toup, Booklist, TabControl, Recommend, Navigator},
   setup() {
     let banner=ref([]);
@@ -97,28 +101,26 @@ export default {
       // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       getGoodsList(curindex, curtabWord).then(res => {
         curType.books.push(...(res.goods.data));
-
+        scrollel && scrollel.value.refresh();
       })
     }
 
     let onScroll = (p) => {
-      console.log(-p.y)
+
       if ((-p.y) > (elposition - 50)) {
-        console.log("OK_______________________")
-        console.log(elposition)
         isshow.value = true;
       } else
         isshow.value = false;
+
+
     };
 
-    let deupdate = debounce(updateBookList, 50);
+    let deupdate = debounce(updateBookList, 0);
 
     let onpullup = () => {
-      deupdate();
 
-      nextTick(() => {
-        scrollel && scrollel.value.refresh();
-      })
+      deupdate();
+      scrollel && scrollel.value.refresh();
     };
 
 
@@ -129,7 +131,6 @@ export default {
       emitter.on('imgloaded', () => {
         scrollel && scrollel.value.refresh();
         if (n % 10 == 0) {
-          scrollel && scrollel.value.refresh();
           if(!elposition)
           {
             elposition=tabref.value.getBoundingClientRect().y;
@@ -137,6 +138,8 @@ export default {
         }
         n++;
       })
+
+
 
       //获取推荐数据
       getHomeData().then((res) => {
@@ -162,18 +165,16 @@ export default {
       initBookList();
 
 
+
       //优化滑动一半切换选项卡
       watch(t, () => {
 
         nextTick(() => {
+
           scrollel && scrollel.value.refresh();
         })
       })
 
-        //
-        // elposition = document.querySelector('.out').getBoundingClientRect().y;
-        // console.log(elposition)
-        //
 
     })
 
