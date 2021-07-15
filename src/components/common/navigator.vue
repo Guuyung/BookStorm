@@ -1,9 +1,10 @@
 <template>
+<!--  上方导航-->
+  <div class="pad"></div>
   <div class="container">
     <div class="left" >
       <slot name="left" ><img src="~assets/images/arrow.png" @click="back"></slot>
     </div>
-
     <div class="middle">
       <slot><span>Book Storm</span></slot>
     </div>
@@ -32,8 +33,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.pad {
+  width: 100%;
+  height: 45px;
+}
 .container {
-  position: relative;
+  top: 0;
+  position: fixed;
+  width: 100%;
   z-index: 2;
   height: 45px;
   background-color: var(--color-tint);

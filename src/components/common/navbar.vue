@@ -1,4 +1,5 @@
 <template>
+<!--下方导航栏-->
 
 <!--  <router-view v-slot="{ Component }">-->
 <!--    <transition>-->
@@ -7,7 +8,7 @@
 <!--      </keep-alive>-->
 <!--    </transition>-->
 <!--  </router-view>-->
-    <router-view></router-view>
+    <router-view :key="$route.query"></router-view>
   <div class="nav">
 
     <router-link to="/" class="item">
@@ -60,7 +61,7 @@ export default {
 
 
 .nav {
-
+  z-index: 1;
   width: 100%;
   .router-link-exact-active {
     height:40px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="bookitem">
+  <div class="bookitem" @click="toDetail(id)">
     <div class="imgbox">
 
       <img :src="imgsrc" class="bookimg" @load="imgload">
@@ -25,23 +25,15 @@
 <script>
 import {debounce} from "@/utils/debounce";
 import emitter from "@/utils/eventBus";
+import {useRouter} from "vue-router";
 
 export default {
-  setup() {
-    function loaded() {
-      emitter.emit('imgloaded');
-    }
-
-    let imgload = debounce(loaded
-        ,100
-    )
-
-    return {
-      imgload
-    }
-  },
 
   props: {
+    id:{
+      type:Number,
+      default:0
+    },
     imgsrc: {
       type: String,
       default: ""
@@ -59,7 +51,28 @@ export default {
       default: 0
     }
 
-  }
+  },
+  setup() {
+    const router=useRouter();
+    function loaded() {
+      emitter.emit('imgloaded');
+    }
+
+    let imgload = debounce(loaded
+        ,100
+    )
+
+    return {
+      imgload,
+      toDetail(id)
+      {
+        console.log(id)
+
+        router.push({path:'/detail',query:{id}})
+      }
+    }
+  },
+
 
 }
 </script>

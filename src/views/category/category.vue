@@ -4,6 +4,7 @@
   <navigator>分类</navigator>
 
 
+<!--  左侧分类栏-->
   <van-sidebar v-model="activeKey" class="left">
 
     <van-collapse v-model="activeName" accordion class="lefttab">
@@ -19,6 +20,7 @@
   </van-sidebar>
 
 
+<!--  上方分类栏-->
   <div class="tab">
     <van-tabs v-model="active" @click="clicktab">
       <van-tab title="销量排序"></van-tab>
@@ -40,6 +42,7 @@
     <div class="list">
       <van-card
           v-for="item in goods[curtab].list"
+  @click="toDetail(item.id)"
           :key="item.id"
           :price="item.price"
           :title="item.title"
@@ -52,16 +55,17 @@
 </template>
 
 <script>
-import emitter from "@/utils/eventBus";
 import {getCateGoods, getCategory} from "@/network/category";
 import Navigator from "@/components/common/navigator";
 import {nextTick, onMounted, reactive, ref} from "vue";
 import scroll from "@/components/common/scroll";
 import Toup from "@/components/common/toup";
+import {useRouter} from "vue-router";
 
 export default {
   components: {Toup, Navigator, scroll},
   setup(){
+    const router=useRouter();
     let scroll = ref(null);
     let activeName = ref('');
     let activeKey = ref('')
@@ -146,7 +150,13 @@ export default {
     return {
       activeName, activeKey, catelist, active, clicktab, clickCateTab, goods, curtab,
       scroll,
-      update
+      update,
+      toDetail(id)
+      {
+
+        router.push({path:'/detail',query:{id}})
+
+      }
     }
   }
 }

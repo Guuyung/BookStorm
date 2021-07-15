@@ -1,10 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import test from "@/test";
 
 const home = () => import('views/home/home.vue');
 const category = () => import('views/category/category.vue');
 const profile = () => import('views/profile/profile.vue');
 const shopcart = () => import('views/shopcart/shopcart.vue');
 const detail = () => import('views/detail/detail.vue')
+
 
 const routes = [
     {
@@ -49,9 +51,23 @@ const routes = [
     },
     {
         path: '/detail',
-        component: detail,
+        component: ()=>import('../views/detail/detail'),
         meta: {
             title: 'Book Storm 详细'
+        }
+    },
+    {
+        path: '/sign',
+        component: ()=>import('../views/profile/sign'),
+        meta: {
+            title: '注册'
+        }
+    },
+    {
+        path:'/login',
+        component: ()=>import('../views/profile/login'),
+        meta: {
+            title: '登录'
         }
     }
 

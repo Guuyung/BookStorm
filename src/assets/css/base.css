@@ -24,7 +24,10 @@ body {
     width: 100vw;
 
 }
-
+img {
+    max-width: 100%;
+    height: auto ;
+}
 a {
     color: var(--color-text);
     text-decoration: none;

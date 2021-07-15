@@ -21,19 +21,19 @@ export default {
   props:{
     top:{
       type:Number,
-      require:true
+      default:45
     },
     left:{
       type:Number,
-      require:true
+      default:0
     },
     right:{
       type:Number,
-      require:true
+      default:0
     },
     bottom:{
       type:Number,
-      require:true
+      default:62
     },
     probeType:{
       type:Number,

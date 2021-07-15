@@ -16,11 +16,6 @@
     <scroll
         :probe-type="3"
         :pull-up-load="true"
-        :click="true"
-        :top="45"
-        :bottom="62"
-        :left="0"
-        :right="0"
         @myscroll="onScroll"
         @pullingUp="onpullup"
         ref="scrollel">
