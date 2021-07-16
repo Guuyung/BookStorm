@@ -17,3 +17,12 @@ export function login(data)
         data
     })
 }
+
+export function logout()
+{
+    return request({
+        url:'/api/auth/logout',
+        method:'post',
+
+    })
+}

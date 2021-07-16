@@ -61,6 +61,7 @@ import {nextTick, onMounted, reactive, ref} from "vue";
 import scroll from "@/components/common/scroll";
 import Toup from "@/components/common/toup";
 import {useRouter} from "vue-router";
+import {Toast} from "vant";
 
 export default {
   components: {Toup, Navigator, scroll},
@@ -85,19 +86,26 @@ export default {
 
     //上拉刷新
       const update = () => {
-        console.log(123)
       let page = ++(goods[curtab.value].page);
+        Toast.loading({message:'加载中...',forbidClick:true,duration:0});
       getCateGoods(curtab.value, page, curcate.value).then(res => {
         goods[curtab.value].list.push(...(res.goods.data));
         nextTick(() => {
           scroll.value.refresh();
-        })
+          Toast.clear();
+        });
+
       })
     }
 
+    let flag=0;
+    Toast.loading({message:'加载中...',forbidClick:true,duration:0});
     //获取分类信息列表
     getCategory().then((res) => {
       catelist.value = res.categories;
+      flag++;
+      if(flag==4)
+        Toast.clear();
     })
 
 
@@ -107,13 +115,22 @@ export default {
         goods.sales.list = res.goods.data;
         nextTick(() => {
           scroll.value.refresh();
+          flag++;
+          if(flag==4)
+            Toast.clear();
         })
       });
       getCateGoods('price').then(res => {
         goods.price.list = res.goods.data;
+        flag++;
+        if(flag==4)
+          Toast.clear();
       });
       getCateGoods('comments_count').then(res => {
         goods.comments.list = res.goods.data;
+        flag++;
+        if(flag==4)
+          Toast.clear();
       });
     }
 
@@ -124,24 +141,27 @@ export default {
     const clicktab = (index) => {
       curtab.value = tabs[index];
       goods[curtab.value].page=1;
-      console.log('goods  ' + curcate.value + '排序  ' + curtab.value)
+      // console.log('goods  ' + curcate.value + '排序  ' + curtab.value)
+      Toast.loading({message:'加载中...',forbidClick:true,duration:0});
       getCateGoods(curtab.value, 1, curcate.value).then(res => {
         goods[curtab.value].list = res.goods.data;
         nextTick(() => {
           scroll.value.refresh();
+          Toast.clear();
         })
       });
     }
 
     //切换商品id分类
     const clickCateTab = (id) => {
-
+      Toast.loading({message:'加载中...',forbidClick:true,duration:0});
       curcate.value = id;
       goods[curtab.value].page=1;
       getCateGoods(curtab.value, 1, id).then(res => {
         goods[curtab.value].list = res.goods.data;
         nextTick(() => {
           scroll.value.refresh();
+          Toast.clear();
         })
       });
       console.log('goods  ' + curcate.value + '排序  ' + curtab.value)

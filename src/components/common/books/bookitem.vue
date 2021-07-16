@@ -66,8 +66,6 @@ export default {
       imgload,
       toDetail(id)
       {
-        console.log(id)
-
         router.push({path:'/detail',query:{id}})
       }
     }

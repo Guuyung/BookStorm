@@ -3,8 +3,6 @@
 
   <navigator>
     <div>
-<!--      detail-->
-<!--      {{ $route.query.id }}-->
     {{detail.title}}
     </div>
   </navigator>
@@ -24,7 +22,7 @@
         <van-tag plain type="danger">推荐</van-tag>
       </template>
       <template #footer>
-        <van-button type="warning">加入购物车</van-button>
+        <van-button type="warning" @click="goCart">加入购物车</van-button>
         <van-button type="danger">立即购买</van-button>
       </template>
     </van-card>
@@ -46,7 +44,7 @@
                     :collect-num="book.collects_count"
                     class="book"
                     :id="book.id"
-                    @click="go(book.id)"
+                    @click="$router.replace({path:'/detail',query:{id:book.id}})"
             >
 
           </bookitem>
@@ -65,10 +63,14 @@ import {useRoute, useRouter} from 'vue-router';
 import {getdetail} from "@/network/detail";
 import {onMounted, reactive, ref} from "vue";
 import bookitem from "@/components/common/books/bookitem";
+import {addCart, getCart} from "@/network/shopCart";
+import {Toast} from "vant";
+import {useStore} from "vuex";
 
 export default {
   components: {bookitem, Navigator,scroll},
   setup() {
+    const store=useStore();
     const router=useRouter();
     let activeName=ref('a');
     let book = reactive({
@@ -76,7 +78,23 @@ export default {
       like_goods:{}
     });
     const route = useRoute();
+    const goCart=()=>{
+      addCart({goods_id:book.detail.id,num:1}).then(res=>{
+        console.log(res)
+        if(res&&(res.status=='201'||res.status=='204'))
+        {
+          Toast.success('添加购物车成功');
+           getCart().then(res=>{
+            store.dispatch('updateShopCartType');
+            console.log(res)
+          })
 
+        }
+
+      })
+
+
+    };
     onMounted(()=>{
       getdetail(route.query.id).then(res => {
 
@@ -85,7 +103,7 @@ export default {
 
         book.like_goods = res.like_goods;
 
-        console.log(book.like_goods)
+
 
       });
 
@@ -95,22 +113,12 @@ export default {
     return {
       ...toRefs(book),
       activeName,
-      go(id)
-      {
-        console.log(id)
-        console.log('aaa')
-        router.replace({path:'/detail',query:{id}})
-      }
+
+      goCart
 
     }
   }
-  ,
-  mounted() {
-    console.log("mounted...........")
-  },
-  unmounted() {
-    console.log('unnnnnnnnnnnnn')
-  }
+
 }
 </script>
 

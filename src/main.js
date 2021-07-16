@@ -8,7 +8,7 @@ import {
     Swipe, SwipeItem, Lazyload, Badge, Collapse, CollapseItem, Sidebar, SidebarItem,
     Tab,
     Tabs,
-    Card,Button,Tag,Form,Field
+    Card,Button,Tag,Form,Field,SwipeCell,SubmitBar
     ,Toast,Notify
 
 } from 'vant';
@@ -18,6 +18,8 @@ let app = createApp(App);
 
 app.use(Sidebar)
     .use(Toast)
+    .use(SubmitBar)
+    .use(SwipeCell )
     .use(Form)
     .use(Notify)
     .use(Field)

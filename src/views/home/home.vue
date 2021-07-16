@@ -57,6 +57,7 @@ import Scroll from "@/components/common/scroll";
 import emitter from "@/utils/eventBus";
 import {debounce} from "@/utils/debounce";
 import HomeSwiper from "@/views/home/homeSwiper";
+import {Toast} from "vant";
 
 export default {
   components: {HomeSwiper, Scroll, Toup, Booklist, TabControl, Recommend, Navigator},
@@ -78,6 +79,7 @@ export default {
     //处理上滑事件，更新列表数据
     function updateBookList() {
       let curtabWord = '';
+      console.log(store.state.curtab)
       switch (t.value) {
         case 0:
           curtabWord = 'sales';
@@ -90,13 +92,16 @@ export default {
           break;
       }
       let curType = booklist[curtabWord];
-
+      console.log(curtabWord)
+      console.log(curType);
       curType.index++;
       let curindex = curType.index;
       // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
+      Toast.loading({message:'加载中...',forbidClick:true,duration:0});
       getGoodsList(curindex, curtabWord).then(res => {
         curType.books.push(...(res.goods.data));
-        nextTick(() => scrollel && scrollel.value.refresh())
+        nextTick(() => scrollel && scrollel.value.refresh());
+        Toast.clear();
       })
     }
 
@@ -139,17 +144,28 @@ export default {
           }
       );
 
+      let flag=0;
       //获取图书列表的初始值
       function initBookList() {
+        Toast.loading({message:'加载中...',forbidClick:true,duration:0});
         getGoodsList(1, 'sales').then((res) => {
           booklist.sales.books = res.goods.data;
+          flag++;
+          if(flag==3)
+            Toast.clear();
         });
 
         getGoodsList(1, 'recommend').then((res) => {
           booklist.recommend.books = res.goods.data;
+          flag++;
+          if(flag==3)
+            Toast.clear();
         });
         getGoodsList(1, 'new').then((res) => {
           booklist.new.books = res.goods.data;
+          flag++;
+          if(flag==3)
+            Toast.clear();
         });
       }
 

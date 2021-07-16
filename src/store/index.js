@@ -1,20 +1,11 @@
 import { createStore } from 'vuex'
-
+import mutations from './mutations'
+import state from './state'
+import actions from './actions'
 export default createStore({
-  state: {
-    //当前点击的控制项
-    curtab:0,
-    scroll:null
-
-  },
-  mutations: {
-    changecurtab(state,cur)
-    {
-      this.state.curtab=cur;
-    }
-  },
-  actions: {
-  },
+  state,
+  mutations,
+  actions,
   modules: {
   }
 })

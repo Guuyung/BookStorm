@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import test from "@/test";
+import {Notify} from "vant";
+import store from '../store'
 
 const home = () => import('views/home/home.vue');
 const category = () => import('views/category/category.vue');
@@ -8,26 +9,28 @@ const shopcart = () => import('views/shopcart/shopcart.vue');
 const detail = () => import('views/detail/detail.vue')
 
 
+
+
 const routes = [
     {
         path: '/',
         component: home,
         meta: {
-            title: 'Book Storm 首页'
+            title: 'Book Storm 首页',
         }
     },
     {
         path: '/home',
         component: home,
         meta: {
-            title: 'Book Storm 首页'
+            title: 'Book Storm 首页',
         }
     },
     {
         path: '/category',
         component: category,
         meta: {
-            title: 'Book Storm 分类'
+            title: 'Book Storm 分类',
         }
 
     },
@@ -35,7 +38,10 @@ const routes = [
         path: '/profile',
         component: profile,
         meta: {
-            title: 'Book Storm 我的'
+            title: 'Book Storm 我的',
+            //是否需要登录后才能访问
+            isAuthRequired:true
+
 
         }
 
@@ -44,7 +50,8 @@ const routes = [
         path: '/shopcart',
         component: shopcart,
         meta: {
-            title: 'Book Storm 购物车'
+            title: 'Book Storm 购物车',
+            isAuthRequired:true
         }
 
 
@@ -53,14 +60,16 @@ const routes = [
         path: '/detail',
         component: ()=>import('../views/detail/detail'),
         meta: {
-            title: 'Book Storm 详细'
+            title: 'Book Storm 详细',
+
         }
     },
     {
         path: '/sign',
         component: ()=>import('../views/profile/sign'),
         meta: {
-            title: '注册'
+            title: '注册',
+
         }
     },
     {
@@ -79,8 +88,18 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
 
-    next();
-    document.title = to.meta.title;
+    // console.log('isAuthRequired:',to.meta.isAuthRequired);
+    // console.log('store.state.isLogin',store.state.isLogin);
+    // console.log('store',store.state)
+    if(to.meta.isAuthRequired&&store.state.isLogin==false) {
+        Notify({type: 'warning', message: '请先登录'});
+        return next('/login');
+    }
+    else
+    {
+      next();
+        document.title = to.meta.title;
+    }
 
 })
 

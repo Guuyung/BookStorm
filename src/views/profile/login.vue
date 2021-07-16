@@ -37,28 +37,31 @@ import {reactive, toRefs} from "vue";
 import {Toast} from "vant";
 import {useRouter} from "vue-router";
 import {login} from "@/network/profile";
+import {useStore} from "vuex";
 export default {
   components: {Navigator},
-  setup() {
-    const router=useRouter();
-    let info=reactive({
-     email:'a1352800232@qq.com',password:'qweasd'
+  setup: function () {
+    const store=useStore();
+    const router = useRouter();
+    let info = reactive({
+      email: 'a1352800232@qq.com', password: 'qweasd'
     })
 
     //a1352800232@qq.com
     //qweasd
 
-    const onSubmit=(val)=>{
+    const onSubmit = (val) => {
 
-      login(val).then(res=>{
-        if(res)
-        {
-          window.localStorage.setItem('cookie',res.access_token);
+      login(val).then(res => {
+        if (res) {
+          window.localStorage.setItem('cookie', res.access_token);
           Toast.success('登录成功');
-
-          setTimeout(()=>{
+          store.commit('changeLogin',true);
+          //对购物车状态进行更新
+          store.dispatch('updateShopCartType');
+          setTimeout(() => {
             router.go(-1);
-          },500);
+          }, 500);
         }
 
       })
@@ -68,7 +71,7 @@ export default {
 
 
     return {
-      ...toRefs(info),onSubmit
+      ...toRefs(info), onSubmit
     }
   }
 }

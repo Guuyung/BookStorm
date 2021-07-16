@@ -26,7 +26,7 @@
 
 
     <router-link to="/shopcart" class="item">
-      <van-badge :content="20" max="9" style="position:fixed !important;">
+      <van-badge :content="$store.state.shopCart.type" max="100" style="position:fixed !important;">
       </van-badge>
       <i class="iconfont icon-biaoqianA01_gouwuche-59"></i>
 
@@ -51,7 +51,8 @@ import category from 'views/category/category.vue';
 import profile from 'views/profile/profile.vue';
 
 export default {
-  components: {home, profile, shopcart, category}
+  components: {home, profile, shopcart, category},
+
 }
 
 
