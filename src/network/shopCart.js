@@ -29,10 +29,10 @@ export function checkCart(data)
     })
 }
 //获取购物车列表
-export function getCart()
+export function getCart(goods='')
 {
     return request({
-        url:`/api/carts`,
+        url:`/api/carts?include=${goods}`,
     })
 }
 //删除购物车
