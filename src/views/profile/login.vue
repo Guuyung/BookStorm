@@ -24,7 +24,7 @@
       <span @click="$router.push('/sign')" style="color:#42b983;margin:20px 10px 5px ;display: inline-block" >没有账号，去注册</span>
 
       <div style="margin: 16px;">
-        <van-button round block type="default" style="background-color:#42b983;color: white;font-size: 20px" native-type="submit">提交</van-button>
+        <van-button round block type="default" style="background:var(--color-weak);color: white;font-size: 20px" native-type="submit">提交</van-button>
       </div>
     </van-form>
 

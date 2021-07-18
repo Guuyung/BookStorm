@@ -22,6 +22,9 @@
         <van-tag plain type="danger">推荐</van-tag>
       </template>
       <template #footer>
+        <van-button @click="collect(detail.id)" style="margin-left: 5px" color="linear-gradient(to right, #ff6034, #ee0a24)">
+          {{ isCollected==1?'已收藏':'加入收藏' }}
+        </van-button>
         <van-button type="warning" @click="goCart">加入购物车</van-button>
         <van-button type="danger">立即购买</van-button>
       </template>
@@ -66,10 +69,12 @@ import bookitem from "@/components/common/books/bookitem";
 import {addCart, getCart} from "@/network/shopCart";
 import {Toast} from "vant";
 import {useStore} from "vuex";
+import {doCollect} from "@/network/collection";
 
 export default {
   components: {bookitem, Navigator,scroll},
   setup() {
+    let isCollected=ref(0);
     const store=useStore();
     const router=useRouter();
     let activeName=ref('a');
@@ -95,6 +100,24 @@ export default {
 
 
     };
+
+    const collect=(id)=>{
+      doCollect(id).then(res=>{
+
+       if(res.status=='201')
+       {
+         isCollected.value=1;
+         Toast.success('收藏成功');
+       }
+        if(res.status=='204')
+        {
+          isCollected.value=0;
+          Toast.success('已取消收藏');
+        }
+      })
+
+    }
+
     onMounted(()=>{
       getdetail(route.query.id).then(res => {
 
@@ -102,7 +125,8 @@ export default {
         book.detail = res.goods;
 
         book.like_goods = res.like_goods;
-
+        isCollected.value=res.goods.is_collect;
+        console.log(res)
 
 
       });
@@ -113,8 +137,9 @@ export default {
     return {
       ...toRefs(book),
       activeName,
-
-      goCart
+      collect,
+      goCart,
+      isCollected
 
     }
   }

@@ -43,7 +43,7 @@ export default {
   width: 100%;
   z-index: 2;
   height: 45px;
-  background-color: var(--color-tint);
+  background: var(--color-strong);
   display: flex;
   color: #FFFFFF;
   font-size: 17px;

@@ -78,7 +78,22 @@ const routes = [
         meta: {
             title: '登录'
         }
-    }
+    },
+    {
+        path:'/collections',
+        component: ()=>import('../views/collections/collections'),
+        meta: {
+            title: '我的收藏',
+            isAuthRequired:true
+        }
+    },
+    {
+        path:'/error',
+        component: ()=>import('../views/error'),
+        meta: {
+            title: '找不到该资源',
+        }
+    },
 
 ]
 

@@ -41,7 +41,7 @@
 
 
       <div style="margin: 16px;">
-        <van-button round block type="default" style="background-color:#42b983;color: white;font-size: 20px" native-type="submit">提交</van-button>
+        <van-button round block type="default" style="background:var(--color-weak);color: white;font-size: 20px" native-type="submit">提交</van-button>
       </div>
     </van-form>
   </div>

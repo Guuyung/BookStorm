@@ -1,13 +1,21 @@
 <template>
 
-  <navigator>购物车 ( <span style="color: white;background: #42b983"> {{ $store.state.shopCart.type }} </span> )
+  <navigator>购物车 ( <span style="color: white;"> {{ $store.state.shopCart.type }} </span> )
   </navigator>
 
   <!--      购物车为空提示-->
   <div v-if="$store.state.shopCart.type==0"  style="background: #FFFFFF;">
     <img src="@/assets/images/emptyShopCart.jpg" style="width: 100%;height: auto">
-    <p style="color:#42b983;font-size: 30px;text-align: center;background: #FFFFFF;line-height: 30px" >购物车空空的...</p>
-    <p style="color:#42b983;font-size: 30px;text-align: center;line-height: 45px;background: #FFFFFF">去随便看看吧</p>
+    <p style="color:#42b983;font-size: 30px;text-align: center;background: #FFFFFF;line-height: 20px" >购物车空空的...</p>
+    <van-button round style="color:#FFFFFF;font-size: 18px;
+   background: var(--color-strong);
+   position: absolute;bottom: 200px;
+   width: 50%;
+   left: 25%;
+   "
+                @click="$router.push('/home')"
+    >去随便看看吧
+    </van-button>
   </div>
 
 
@@ -19,7 +27,7 @@
 
     <div v-for="book in shopCart" style="position:relative;">
 
-        <van-checkbox  :name="book.id" label-disabled >
+        <van-checkbox  :name="book.id"  >
           <van-swipe-cell>
             <img :src="book.goods.cover_url" alt="">
 
@@ -29,8 +37,10 @@
             <span class="price">￥ {{ book.goods.price }}</span>
             <span class="num">库存 ： {{book.goods.stock}}</span>
 
-            <van-stepper :name="book.id" v-model="book.num" :min="1" :max="book.goods.stock"
-                         disable-input @change="onChange"/>
+<!--            <span @click.prevent.stop="onChange">-->
+            <van-stepper :id="book.id" v-model="book.num" :min="1" :max="book.goods.stock"
+                         disable-input @click.stop="onChange"/>
+<!--          </span>-->
             <template #right>
               <van-button square text="删除" type="danger" class="delete-button" @click="deleteItem(book.id)"/>
             </template>
@@ -47,10 +57,11 @@
 <!--防止显示不完全-->
   <div class="padding" style="height: 50px;width: 100%;background: #FFFFFF"></div>
 
+  <template v-if="shopCart.length!=0">
   <van-checkbox   v-model="selectAll" class="all" @click="changeAll" checked-color="#42b983">全选</van-checkbox>
   <van-submit-bar :price="total" button-text="提交订单"
                   @submit="onSubmit"/>
-
+  </template>
 
 </template>
 
@@ -77,14 +88,13 @@ export default {
 
     let total=computed(()=>{
       let sum=0;
-      console.log(shopCart.value)
+
       shopCart.value.filter(item=>result.value.includes(item.id))
       .map(e=>{
 
         let num=e.goods.num;let pr=e.goods.price;
-        console.log(123)
-        console.log('num',num)
-        console.log(pr)
+
+
         sum+=parseInt(e.num)*parseFloat(e.goods.price);
       });
 
@@ -114,7 +124,7 @@ export default {
     })
 
     const changeAll=()=>{
-    //   console.log(123);
+
       //点击后，触发@click事件，组件内部改变双向绑定的值，调用@change回调
 
     if(!selectAll.value)
@@ -147,16 +157,20 @@ export default {
 
     init();
 
-    const onChangePrimary=(val,detail)=>{
-      modifyCart(detail.name,{num:val}).then(res=>{
+    const onChangePrimary=(e)=>{
+      let ele = document.elementFromPoint(e.pageX,e.pageY);
+      let id=ele.parentNode.id;
+      let num=ele.parentNode.children[1].ariaValueNow;
+
+      modifyCart(id,{num}).then(res=>{
         if(res.status=='204')
         {
           shopCart.value.forEach(item=>{
             //本地也需要改变数量以便后续计算价格
             //经验,忘记改变本地数据
-            if(item.id==detail.name)
+            if(item.id==id)
             {
-              item.num=val;
+              item.num=num;
             }
           })
         }
@@ -170,7 +184,7 @@ export default {
     const deleteItem=id=>{
       Toast.loading({message:'正在删除商品...',duration:0,forbidClick:true});
       delCart(id).then(res=>{
-        console.log(res)
+
         store.dispatch('updateShopCartType');
         init();
         Toast.clear();

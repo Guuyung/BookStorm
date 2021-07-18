@@ -29,6 +29,10 @@ export function request(config){
     },err=>{
         //对所有错误进行提示
         // console.log(err.response)
+        if(err.response.status=='404')
+        {
+            router.push('/error')
+        }
 
         if(err.response.status=='401')
         {

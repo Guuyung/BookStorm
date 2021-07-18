@@ -9,15 +9,20 @@ import {
     Tab,
     Tabs,
     Card,Button,Tag,Form,Field,SwipeCell,SubmitBar
-    ,Toast,Notify,Stepper,Checkbox,CheckboxGroup
+    ,Toast,Notify,Stepper,Checkbox,CheckboxGroup,Cell, CellGroup,Pagination,Empty
 
 } from 'vant';
 
 
 let app = createApp(App);
-
+app.f=()=>{
+    console.log(123)}
 app.use(Sidebar)
     .use(Toast)
+    .use(Empty)
+    .use(Pagination )
+    .use(Cell)
+    .use(CellGroup)
     .use(Checkbox)
     .use(CheckboxGroup )
     .use(Stepper )
