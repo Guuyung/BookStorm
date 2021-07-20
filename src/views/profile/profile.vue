@@ -3,17 +3,18 @@
   <navigator>我的</navigator>
   <div class="info">
 
-    <img src="@/assets/images/b.png" alt="">
+    <img :src="avatar_url" alt="">
 
 
-    <p class="name">用户名: mike</p>
-    <p class="email">邮箱: 123@qq.xxxxxxxxxxx</p>
+    <p class="name">用户名: {{name}}</p>
+    <p class="email">邮箱: {{email}}</p>
 
   </div>
 
   <van-cell title="我的收藏" is-link to="collections"/>
   <van-cell title="我的订单" is-link to="orderlist"/>
   <van-cell title="地址管理" is-link to="addresslist"/>
+  <van-cell title="账号管理" is-link @click="$router.push({path:'/profileupdate',query:{name:name}})"/>
 
 
   <van-button round type="default" block style="background:var(--color-strong);color: white; margin:50px auto;width: 50%;
@@ -25,11 +26,12 @@
 
 <script>
 import Navigator from "@/components/common/navigator";
-import {logout} from "@/network/profile";
+import {goupdateAva, logout, userInfo} from "@/network/profile";
 import {Notify} from "vant";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {getCity} from "@/network/addressManagement";
+import {reactive, toRefs} from "vue";
 
 export default {
   components: {Navigator},
@@ -37,6 +39,22 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    let state=reactive({
+      name:'',
+      email:'',
+      avatar_url:''
+    })
+
+    const init=()=>{
+      userInfo().then(res=>{
+        console.log(res);
+        state.name=res.name;
+        state.email=res.email;
+        state.avatar_url=res.avatar_url==''?'@/assets/images/default_avatar':res.avatar_url;
+
+      })
+    }
+    init();
     const gologout = () => {
       logout().then(res => {
         if (res && res.status == '204') {
@@ -59,7 +77,7 @@ export default {
 
 
     return {
-      gologout
+      gologout,...toRefs(state)
     }
   }
 

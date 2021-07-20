@@ -10,7 +10,7 @@ import {
     Tabs,
     Card, Button, Tag, Form, Field, SwipeCell, SubmitBar
     , Toast, Notify, Stepper, Checkbox, CheckboxGroup, Cell, CellGroup, Pagination, Empty, AddressList
-    ,AddressEdit,ContactCard,Divider,Popup,Grid, GridItem,Image as VanImage,List,PullRefresh
+    ,AddressEdit,ContactCard,Divider,Popup,Grid, GridItem,Image as VanImage,List,PullRefresh,Uploader
 } from 'vant';
 
 
@@ -20,6 +20,7 @@ app.f = () => {
 }
 app.use(Sidebar)
     .use(Toast)
+    .use(Uploader )
     .use(PullRefresh )
     .use(VanImage)
     .use(ContactCard )

@@ -70,6 +70,7 @@ import {addCart, getCart} from "@/network/shopCart";
 import {Toast} from "vant";
 import {useStore} from "vuex";
 import {doCollect} from "@/network/collection";
+import {goupdateAva} from "@/network/profile";
 
 export default {
   components: {bookitem, Navigator, scroll},
@@ -125,7 +126,7 @@ export default {
 
       })
     }
-    onMounted(() => {
+
       getdetail(route.query.id).then(res => {
 
 
@@ -139,7 +140,8 @@ export default {
       });
 
 
-    })
+
+
 
     return {
       ...toRefs(book),

@@ -38,13 +38,14 @@
   </div>
 
   <van-divider  content-position="left">订单中商品</van-divider>
-  <van-card
+  <van-card @click="$router.push({path:'/detail',query:{id:goods[index].id}})"
       v-for="(item,index) in goodsOrder"
       style="font-size: 15px;box-shadow: var(--shadow-down);width: 95%;margin:10px auto;border-radius: 10px"
       :num="item.num"
       :price="item.price"
       :desc="goods[index].description"
       :title="goods[index].title"
+            :key="item.id"
   :thumb="goods[index].cover_url"/>
 
 

@@ -14,8 +14,9 @@
   >
 
 <!--  整个订单块-->
-    <template v-for="item in list">
-    <div class="order" v-if="item.orderDetails.data.length!=0" >
+    <template v-for="item in list" >
+    <div class="order" v-if="item.orderDetails.data.length!=0"
+         @click="$router.push({path:'/orderdetail',query:{id:item.id}})">
 
 
       <div class="label">订单编号：</div>

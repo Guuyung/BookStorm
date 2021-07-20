@@ -26,3 +26,27 @@ export function logout()
 
     })
 }
+export function userInfo()
+{
+    return request({
+        url:'/api/user',
+
+    })
+}export function goupdateName(data)
+{
+    return request({
+        url:'/api/user',
+        method:'put',
+        data
+
+    })
+}
+export function goupdateAva(data)
+{
+    return request({
+        url:'/api/user/avatar',
+        method:'patch',
+        data
+
+    })
+}

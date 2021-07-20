@@ -16,8 +16,6 @@ export default {
       emitter.emit('toTop');
     }
     emitter.on('onscroll',(p)=>{
-      console.log('123...');
-      console.log(-p.y)
       if((-p.y)>1000)
         isshow.value=true;
       else

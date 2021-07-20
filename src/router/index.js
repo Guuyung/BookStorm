@@ -133,6 +133,13 @@ const routes = [
             title: '订单详情',
             isAuthRequired: true
         }
+    },    {
+        path: '/profileupdate',
+        component: () => import('../views/profile/profileupdate'),
+        meta: {
+            title: '账号管理',
+            isAuthRequired: true
+        }
     },
 ]
 
