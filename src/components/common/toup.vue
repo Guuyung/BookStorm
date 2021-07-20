@@ -1,19 +1,23 @@
 <template>
-  <div class="toup" @click="toTop" v-show="isshow">
+  <div class="toup" @click="toTop" v-show="isshow" ref="toup">
   </div>
 </template>
 
 <script>
 import emitter from "@/utils/eventBus";
-import {ref} from "vue";
+import {onMounted, ref, watch, watchEffect} from "vue";
 export default {
   setup()
   {
+
+    console.log('123...');
     let isshow=ref(false);
     const toTop=()=>{
       emitter.emit('toTop');
     }
     emitter.on('onscroll',(p)=>{
+      console.log('123...');
+      console.log(-p.y)
       if((-p.y)>1000)
         isshow.value=true;
       else
@@ -21,7 +25,9 @@ export default {
     })
     return {
       toTop,
-      isshow
+      isshow,
+
+
     }
   }
 }
@@ -35,5 +41,6 @@ export default {
     right: 15px;
     height: 50px;
     width: 50px;
+    z-index: 5;
   }
 </style>

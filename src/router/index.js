@@ -9,8 +9,6 @@ const shopcart = () => import('views/shopcart/shopcart.vue');
 const detail = () => import('views/detail/detail.vue')
 
 
-
-
 const routes = [
     {
         path: '/',
@@ -40,7 +38,7 @@ const routes = [
         meta: {
             title: 'Book Storm 我的',
             //是否需要登录后才能访问
-            isAuthRequired:true
+            isAuthRequired: true
 
 
         }
@@ -51,14 +49,14 @@ const routes = [
         component: shopcart,
         meta: {
             title: 'Book Storm 购物车',
-            isAuthRequired:true
+            isAuthRequired: true
         }
 
 
     },
     {
         path: '/detail',
-        component: ()=>import('../views/detail/detail'),
+        component: () => import('../views/detail/detail'),
         meta: {
             title: 'Book Storm 详细',
 
@@ -66,35 +64,76 @@ const routes = [
     },
     {
         path: '/sign',
-        component: ()=>import('../views/profile/sign'),
+        component: () => import('../views/profile/sign'),
         meta: {
             title: '注册',
 
         }
     },
     {
-        path:'/login',
-        component: ()=>import('../views/profile/login'),
+        path: '/login',
+        component: () => import('../views/profile/login'),
         meta: {
             title: '登录'
         }
     },
     {
-        path:'/collections',
-        component: ()=>import('../views/collections/collections'),
+        path: '/collections',
+        component: () => import('../views/collections/collections'),
         meta: {
             title: '我的收藏',
-            isAuthRequired:true
+            isAuthRequired: true
+        }
+    },
+
+    {
+        name: 'address',
+        path: '/address',
+        component: () => import('../views/addressMng/addressAdd'),
+        meta: {
+            title: '',
+            isAuthRequired: true
         }
     },
     {
-        path:'/error',
-        component: ()=>import('../views/error'),
+        path: '/addresslist',
+        component: () => import('../views/addressMng/addresslist'),
+        meta: {
+            title: '地址管理',
+            isAuthRequired: true
+        },
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        component: () => import('../views/error'),
         meta: {
             title: '找不到该资源',
         }
     },
-
+    {
+        path: '/orderpreview',
+        component: () => import('../views/order/orderPreview'),
+        meta: {
+            title: '订单预览',
+            isAuthRequired: true
+        }
+    },
+    {
+        path: '/orderlist',
+        component: () => import('../views/order/orderList'),
+        meta: {
+            title: '订单列表',
+            isAuthRequired: true
+        }
+    },
+    {
+        path: '/orderdetail',
+        component: () => import('../views/order/orderDetail'),
+        meta: {
+            title: '订单详情',
+            isAuthRequired: true
+        }
+    },
 ]
 
 const router = createRouter({
@@ -106,13 +145,11 @@ router.beforeEach((to, from, next) => {
     // console.log('isAuthRequired:',to.meta.isAuthRequired);
     // console.log('store.state.isLogin',store.state.isLogin);
     // console.log('store',store.state)
-    if(to.meta.isAuthRequired&&store.state.isLogin==false) {
+    if (to.meta.isAuthRequired && store.state.isLogin == false) {
         Notify({type: 'warning', message: '请先登录'});
         return next('/login');
-    }
-    else
-    {
-      next();
+    } else {
+        next();
         document.title = to.meta.title;
     }
 

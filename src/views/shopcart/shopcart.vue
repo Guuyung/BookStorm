@@ -141,9 +141,12 @@ export default {
     }
 
     const init = () => {
+
       Toast.loading({message:'加载中...',duration:0,forbidClick:true});
+      store.dispatch('updateShopCartType');
       getCart('goods').then(res => {
 
+        console.log(res)
         shopCart.value = res.data;
 
         //进入页面时，将被选中的id放入result中，自动勾上
@@ -200,7 +203,7 @@ export default {
         }
 
 
-        router.push('/order');
+        router.push('/orderpreview');
 
     }
     return {

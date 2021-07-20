@@ -14,7 +14,11 @@ export function sucLoad(msg = '操作成功') {
 
 }
 
-export function close()
+export function load()
 {
-    Toast.clear();
+    Toast.loading({
+        message: '加载中...',
+        duration: 0,
+        forbidClick: true,
+    });
 }

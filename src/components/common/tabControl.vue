@@ -3,7 +3,7 @@
     <div v-for="(option,index) in options " class="option"
          @click="tap(index)"
          :key="option"
-         :class="{'active':index==store.state.curtab}"><span>{{option}}</span></div>
+         :class="{'active':index==store.state.curtab}"><span style="white-space:nowrap;">{{option}}</span></div>
   </div>
 </template>
 
@@ -53,13 +53,32 @@ export default {
     }
     span {
       padding: 3px;
-
     }
     .active span{
-      border-bottom: 3px var(--color-tint) solid;
-      color: var(--color-tint);
-
+      animation-name: fontChange;
+      animation-duration: 2s;
+      //animation-iteration-count: infinite;
+      //animation-direction: alternate;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
     }
 
   }
+  
+  @keyframes fontChange {
+    0% {
+      color:#888888;
+      border-bottom: 3px #FFFFFF solid;
+    }
+    100% {
+      color: var(--color-tint);
+      border-bottom: 3px var(--color-tint) solid;
+
+    }
+    //100% {
+    //  color:#888888;
+    //  border-bottom: 3px #FFFFFF solid;
+    //}
+  }
+  
 </style>

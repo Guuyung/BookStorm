@@ -5,17 +5,15 @@
 
     <img src="@/assets/images/b.png" alt="">
 
-    <div class="desc">
-      <span class="name">mike</span>
-      <span class="email"><span>123@qq.xxxxxxxxxxx</span></span>
-    </div>
+
+    <p class="name">用户名: mike</p>
+    <p class="email">邮箱: 123@qq.xxxxxxxxxxx</p>
+
   </div>
 
-  <van-cell title="我的收藏" is-link to="collections" />
-  <van-cell title="路由跳转" is-link to="index" />
-  <van-cell title="路由跳转" is-link to="index" />
-  <van-cell title="路由跳转" is-link to="index" />
-
+  <van-cell title="我的收藏" is-link to="collections"/>
+  <van-cell title="我的订单" is-link to="orderlist"/>
+  <van-cell title="地址管理" is-link to="addresslist"/>
 
 
   <van-button round type="default" block style="background:var(--color-strong);color: white; margin:50px auto;width: 50%;
@@ -31,12 +29,14 @@ import {logout} from "@/network/profile";
 import {Notify} from "vant";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import {getCity} from "@/network/addressManagement";
 
 export default {
   components: {Navigator},
   setup() {
     const store = useStore();
     const router = useRouter();
+
     const gologout = () => {
       logout().then(res => {
         if (res && res.status == '204') {
@@ -69,54 +69,42 @@ export default {
 
 <style scoped lang="scss">
 .info {
-  border: 1px solid rgba(136, 136, 136, .5);
+  overflow: hidden;
   box-shadow: 2px 2px 11px #888888;
   width: 80vw;
-  display: flex;
-  height: 25vh;
+  height: 150px;
   margin: 20px auto;
   color: #FFFFFF;
-  background: linear-gradient(to top,#8DEBFF,#54E38E);
+  font-size: 20px;
+  text-align: center;
+
+  border-radius: 15px;
+
+  background: linear-gradient(to top, #8DEBFF, #54E38E);
+
   img {
+    display: block;
+    border-radius: 50%;
+    margin: 15px auto;
+    width: 20%;
+  }
 
-    flex: 1 0 0%;
-    width: 0px;
+
+  .name {
+    margin: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .email {
+    margin: 3px 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
   }
 
-  .desc {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    .name {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      font-size: 40px;
-
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-    }
-
-    .email {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      span {
-        font-size: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width:150px;
-      }
-
-    }
-
-  }
 
 }
 </style>

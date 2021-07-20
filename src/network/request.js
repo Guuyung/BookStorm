@@ -1,11 +1,11 @@
 import axios from 'axios';
-import {Notify} from "vant";
+import {Notify, Toast} from "vant";
 import router from "@/router";
 
 export function request(config){
     const instance=axios.create({
         baseURL: 'https://api.shop.eduwork.cn',
-        timeout: 5000
+        timeout: 10000
     })
 
     instance.interceptors.request.use(config=>{
@@ -28,12 +28,25 @@ export function request(config){
         return res.data? res.data: res ;
     },err=>{
         //对所有错误进行提示
-        // console.log(err.response)
-        if(err.response.status=='404')
+        console.log(err.response)
+
+        if(err.response.status_code=='400')
         {
-            router.push('/error')
+            Toast.fail('订单提交失败，请重新下单')
+            return;
         }
 
+        if(err.response&&(!'status' in err.response))
+        {
+            Toast.clear();
+            Toast.fail('网络好像有点问题，刷新看看吧');
+            return;
+        }
+        if(err.response.status=='404')
+        {
+            router.push('/error');
+            return;
+        }
         if(err.response.status=='401')
         {
             Notify({message: '您还未登录，请先登录', type: 'warning'});
@@ -41,18 +54,8 @@ export function request(config){
             return;
         }
 
-
-        if(err.response['data'])
-        {
-            Notify({message: '邮箱或密码错误', type: 'warning'});
-            return;
-        }
-        else
-        {
-            Notify(err.response.data.errors[((Object.keys(err.response.data.errors))[0])][0]);
-            return;
-        }
-
+            if(err.response.data.errors)
+            Notify(err.response.data.errors[Object.keys(err.response.data.errors)[0]][0]);
 
 
     })

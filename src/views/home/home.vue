@@ -175,6 +175,7 @@ export default {
       //优化滑动一半切换选项卡
       watch(t, () => {
 
+
         nextTick(() => {
 
           scrollel && scrollel.value.refresh();

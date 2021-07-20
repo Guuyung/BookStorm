@@ -8,26 +8,37 @@ import {
     Swipe, SwipeItem, Lazyload, Badge, Collapse, CollapseItem, Sidebar, SidebarItem,
     Tab,
     Tabs,
-    Card,Button,Tag,Form,Field,SwipeCell,SubmitBar
-    ,Toast,Notify,Stepper,Checkbox,CheckboxGroup,Cell, CellGroup,Pagination,Empty
-
+    Card, Button, Tag, Form, Field, SwipeCell, SubmitBar
+    , Toast, Notify, Stepper, Checkbox, CheckboxGroup, Cell, CellGroup, Pagination, Empty, AddressList
+    ,AddressEdit,ContactCard,Divider,Popup,Grid, GridItem,Image as VanImage,List,PullRefresh
 } from 'vant';
 
 
 let app = createApp(App);
-app.f=()=>{
-    console.log(123)}
+app.f = () => {
+    console.log(123)
+}
 app.use(Sidebar)
     .use(Toast)
+    .use(PullRefresh )
+    .use(VanImage)
+    .use(ContactCard )
+    .use(List  )
+    .use(Grid )
+    .use(GridItem )
+    .use(Popup  )
+    .use(AddressEdit )
+    .use(Divider )
+    .use(AddressList)
     .use(Empty)
-    .use(Pagination )
+    .use(Pagination)
     .use(Cell)
     .use(CellGroup)
     .use(Checkbox)
-    .use(CheckboxGroup )
-    .use(Stepper )
+    .use(CheckboxGroup)
+    .use(Stepper)
     .use(SubmitBar)
-    .use(SwipeCell )
+    .use(SwipeCell)
     .use(Form)
     .use(Notify)
     .use(Field)

@@ -1,3 +1,3 @@
-let a=[2,4,5,6,7,8];
-
-console.log(a.includes(4))
+let a=[1,2,3],b=[4,5,6];
+a.push(...b)
+console.log(a)

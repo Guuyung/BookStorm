@@ -65,10 +65,21 @@ export default {
   z-index: 1;
   width: 100%;
   .router-link-exact-active {
-    height:40px;
-    color: var(--color-high-text);
+
+    animation-name: change;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
   }
-;
+
+  @keyframes change {
+    0% {}
+    100%{
+      height:40px;
+      color: var(--color-high-text);
+    }
+  }
+
   font: var(--color-text) var(--font-size);
   text-align: center;
   display: flex;
