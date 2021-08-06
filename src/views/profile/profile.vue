@@ -34,6 +34,7 @@ import {getCity} from "@/network/addressManagement";
 import {reactive, toRefs} from "vue";
 
 export default {
+  name:'profile',
   components: {Navigator},
   setup() {
     const store = useStore();
@@ -51,7 +52,6 @@ export default {
         state.name=res.name;
         state.email=res.email;
         state.avatar_url=res.avatar_url==''?'@/assets/images/default_avatar':res.avatar_url;
-
       })
     }
     init();

@@ -3,10 +3,10 @@
 
     <!--      顶部导航栏-->
     <navigator>
-      <template v-slot:default>Book Storm</template>
-      <template v-slot:left>
+      <template #default>Book Storm</template>
+      <template #left>
         <!--        用div来占位默认的返回键，首页不需要返回键的显示-->
-        <div></div>
+        <template></template>
       </template>
     </navigator>
 
@@ -47,7 +47,7 @@
 <script>
 import Navigator from "@/components/common/navigator";
 import {getHomeData, getGoodsList} from "@/network/home";
-import {ref, reactive, onMounted, computed, watch, nextTick, watchEffect} from 'vue'
+import {ref, reactive, onMounted, computed, watch, nextTick, watchEffect, onActivated, onBeforeMount} from 'vue'
 import Recommend from "@/views/home/recommend";
 import TabControl from "@/components/common/tabControl";
 import Booklist from "@/components/common/books/booklist";
@@ -79,7 +79,6 @@ export default {
     //处理上滑事件，更新列表数据
     function updateBookList() {
       let curtabWord = '';
-      console.log(store.state.curtab)
       switch (t.value) {
         case 0:
           curtabWord = 'sales';
@@ -92,16 +91,19 @@ export default {
           break;
       }
       let curType = booklist[curtabWord];
-      console.log(curtabWord)
-      console.log(curType);
       curType.index++;
       let curindex = curType.index;
       // console.log(`当前选项卡 ${curtabWord}   当前页数 ${curindex}`);
       Toast.loading({message:'加载中...',forbidClick:true,duration:0});
+      console.log("up。。。。。")
       getGoodsList(curindex, curtabWord).then(res => {
         curType.books.push(...(res.goods.data));
-        nextTick(() => scrollel && scrollel.value.refresh());
-        Toast.clear();
+        console.log(res.goods.data)
+        nextTick(() => {
+          scrollel.value.refresh();
+          Toast.clear();
+        });
+
       })
     }
 
@@ -114,13 +116,12 @@ export default {
 
     };
 
-    let deupdate = debounce(updateBookList, 0);
+    let deupdate = debounce(updateBookList, 500);
 
     let onpullup = () => {
-
       deupdate();
-      scrollel && scrollel.value.refresh();
     };
+
 
 
     let elposition = 0;
@@ -151,6 +152,9 @@ export default {
         getGoodsList(1, 'sales').then((res) => {
           booklist.sales.books = res.goods.data;
           flag++;
+          nextTick(() => {
+            scrollel.value.refresh();
+          });
           if(flag==3)
             Toast.clear();
         });
@@ -171,13 +175,11 @@ export default {
 
       initBookList();
 
-
       //优化滑动一半切换选项卡
       watch(t, () => {
-
-
+        console.log('cg')
+        emitter.emit('toTop');
         nextTick(() => {
-
           scrollel && scrollel.value.refresh();
         })
       })

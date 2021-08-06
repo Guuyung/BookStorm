@@ -1,3 +1,4 @@
-let a=[1,2,3],b=[4,5,6];
-a.push(...b)
-console.log(a)
+let b={name:'xxx',age:180};
+let a={s:'aaa'}
+Object.assign(b,a,{['name']:'sss'});
+console.log(b)

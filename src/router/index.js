@@ -15,6 +15,7 @@ const routes = [
         component: home,
         meta: {
             title: 'Book Storm 首页',
+            keepAlive: true
         }
     },
     {
@@ -22,6 +23,7 @@ const routes = [
         component: home,
         meta: {
             title: 'Book Storm 首页',
+            keepAlive: true
         }
     },
     {
@@ -29,10 +31,12 @@ const routes = [
         component: category,
         meta: {
             title: 'Book Storm 分类',
+            keepAlive: true
         }
 
     },
     {
+        name: 'profile',
         path: '/profile',
         component: profile,
         meta: {
@@ -55,6 +59,7 @@ const routes = [
 
     },
     {
+        name: 'detail',
         path: '/detail',
         component: () => import('../views/detail/detail'),
         meta: {

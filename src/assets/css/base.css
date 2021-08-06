@@ -13,6 +13,13 @@
     --van-primary-color:var(--van-primary-color);
 
 }
+.van-checkbox-group .van-checkbox__icon {
+    width: 5vw !important;
+}
+.van-checkbox-group .van-checkbox__label {
+    width: 94vw !important;
+
+}
 .van-contact-card__value {
     margin-left: 5px;
     color: white !important;

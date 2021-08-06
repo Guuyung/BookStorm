@@ -1,14 +1,19 @@
 <template>
 <!--下方导航栏-->
 
-<!--  <router-view v-slot="{ Component }">-->
-<!--    <transition>-->
+<!--  <router-view v-slot="{ Component }" :key="$route.query">-->
 <!--      <keep-alive>-->
 <!--        <component :is="Component" />-->
 <!--      </keep-alive>-->
-<!--    </transition>-->
 <!--  </router-view>-->
-    <router-view :key="$route.query"></router-view>
+
+  <router-view v-slot="{ Component }">
+    <keep-alive exclude="detail" >
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
+
+
   <div class="nav">
 
     <router-link to="/" class="item">

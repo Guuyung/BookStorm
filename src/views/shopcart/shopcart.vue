@@ -4,9 +4,9 @@
   </navigator>
 
   <!--      购物车为空提示-->
-  <div v-if="$store.state.shopCart.type==0"  style="background: #FFFFFF;">
+  <div v-if="$store.state.shopCart.type==0" style="background: #FFFFFF;">
     <img src="@/assets/images/emptyShopCart.jpg" style="width: 100%;height: auto">
-    <p style="color:#42b983;font-size: 30px;text-align: center;background: #FFFFFF;line-height: 20px" >购物车空空的...</p>
+    <p style="color:#42b983;font-size: 30px;text-align: center;background: #FFFFFF;line-height: 20px">购物车空空的...</p>
     <van-button round style="color:#FFFFFF;font-size: 18px;
    background: var(--color-strong);
    position: absolute;bottom: 200px;
@@ -19,48 +19,45 @@
   </div>
 
 
-<!--  <scroll :bottom="112" :pullUpLoad="false">-->
-
-
-    <van-checkbox-group v-model="result" ref="checkboxGroup" checked-color="#42b983" @change="onCheck">
+  <van-checkbox-group v-model="result" ref="checkboxGroup" checked-color="#42b983" @change="onCheck">
 
 
     <div v-for="book in shopCart" style="position:relative;">
 
-        <van-checkbox  :name="book.id"  >
-          <van-swipe-cell>
-            <img :src="book.goods.cover_url" alt="">
+      <van-checkbox :name="book.id">
+        <van-swipe-cell>
+          <img :src="book.goods.cover_url" alt="">
 
-            <!--      计数器-->
-            <h3 class="title">{{ book.goods.title }}</h3>
-            <span class="desc">{{ book.goods.description }}</span>
-            <span class="price">￥ {{ book.goods.price }}</span>
-            <span class="num">库存 ： {{book.goods.stock}}</span>
+          <!--      计数器-->
+          <h3 class="title">{{ book.goods.title }}</h3>
+          <span class="desc">{{ book.goods.description }}</span>
+          <span class="price">￥ {{ book.goods.price }}</span>
+          <span class="num">库存 ： {{ book.goods.stock }}</span>
 
-<!--            <span @click.prevent.stop="onChange">-->
-            <van-stepper :id="book.id" v-model="book.num" :min="1" :max="book.goods.stock"
-                         disable-input @click.stop="onChange"/>
-<!--          </span>-->
-            <template #right>
-              <van-button square text="删除" type="danger" class="delete-button" @click="deleteItem(book.id)"/>
-            </template>
-          </van-swipe-cell>
+          <van-stepper :id="book.id" v-model="book.num" :min="1" :max="book.goods.stock"
+                       disable-input @click.stop="onChange"/>
+          <template #right>
+            <van-button square text="删除" type="danger" class="delete-button" @click="deleteItem(book.id)"/>
+          </template>
+        </van-swipe-cell>
 
-        </van-checkbox>
+      </van-checkbox>
 
     </div>
 
 
-    </van-checkbox-group>
+  </van-checkbox-group>
 
-<!--  </scroll>-->
-<!--防止显示不完全-->
+
+  <!--防止显示不完全-->
   <div class="padding" style="height: 50px;width: 100%;background: #FFFFFF"></div>
 
   <template v-if="shopCart.length!=0">
-  <van-checkbox   v-model="selectAll" class="all" @click="changeAll" checked-color="#42b983">全选</van-checkbox>
-  <van-submit-bar :price="total" button-text="提交订单"
-                  @submit="onSubmit"/>
+    <van-checkbox v-model="selectAll" class="all" @click="changeAll" checked-color="#42b983"
+    >全选
+    </van-checkbox>
+    <van-submit-bar :price="total" button-text="提交订单"
+                    @submit="onSubmit"/>
   </template>
 
 </template>
@@ -80,69 +77,67 @@ export default {
   setup() {
     let selectAll = ref(false)
 
-    const checkboxGroup=ref(null);
+    const checkboxGroup = ref(null);
     const result = ref([]);   //购物车的选中状态，哪个物品选中了就放入它的id
     const router = useRouter();
     const store = useStore();
     let shopCart = ref([]);
 
-    let total=computed(()=>{
-      let sum=0;
+    let total = computed(() => {
+      let sum = 0;
 
-      shopCart.value.filter(item=>result.value.includes(item.id))
-      .map(e=>{
+      shopCart.value.filter(item => result.value.includes(item.id))
+          .map(e => {
 
-        let num=e.goods.num;let pr=e.goods.price;
+            let num = e.goods.num;
+            let pr = e.goods.price;
 
 
-        sum+=parseInt(e.num)*parseFloat(e.goods.price);
-      });
+            sum += parseInt(e.num) * parseFloat(e.goods.price);
+          });
 
-      sum*=100;
+      sum *= 100;
       return sum;
     })
 
 
-    const onCheck=(r)=>{
+    const onCheck = (r) => {
       //会自动传入勾选的数组
-      if(shopCart.value.length!=result.value.length)
-      {
-        selectAll.value=false;
-      }else
-        selectAll.value=true;
+      if (shopCart.value.length != result.value.length) {
+        selectAll.value = false;
+      } else
+        selectAll.value = true;
     };
 
-    const checkPrimary=()=>{
-      checkCart({cart_ids:result.value})
+    const checkPrimary = () => {
+      checkCart({cart_ids: result.value})
     };
 
-    const check=debounce(checkPrimary,200);
+    const check = debounce(checkPrimary, 200);
 
 
-    watch(result,()=>{
+    watch(result, () => {
       check();
     })
 
-    const changeAll=()=>{
+    const changeAll = () => {
 
       //点击后，触发@click事件，组件内部改变双向绑定的值，调用@change回调
 
-    if(!selectAll.value)
-    {
-      result.value=[];
-      selectAll.value=false;
-    }
-    else {
-      checkboxGroup.value.toggleAll(true);
-      selectAll.value=true;
-    }
+      if (!selectAll.value) {
+        result.value = [];
+        selectAll.value = false;
+      } else {
+        checkboxGroup.value.toggleAll(true);
+        selectAll.value = true;
+      }
 
 
     }
 
     const init = () => {
 
-      Toast.loading({message:'加载中...',duration:0,forbidClick:true});
+      Toast.loading({message: '加载中...', duration: 0, forbidClick: true});
       store.dispatch('updateShopCartType');
       getCart('goods').then(res => {
 
@@ -150,30 +145,28 @@ export default {
         shopCart.value = res.data;
 
         //进入页面时，将被选中的id放入result中，自动勾上
-        result.value=res.data.filter(n=>n.is_checked==1).map(n=>n.id);
+        result.value = res.data.filter(n => n.is_checked == 1).map(n => n.id);
         //初始化全选按钮
-        if(result.value.length==shopCart.value.length)
-          selectAll.value=true;
+        if (result.value.length == shopCart.value.length)
+          selectAll.value = true;
         Toast.clear();
       })
     }
 
     init();
 
-    const onChangePrimary=(e)=>{
-      let ele = document.elementFromPoint(e.pageX,e.pageY);
-      let id=ele.parentNode.id;
-      let num=ele.parentNode.children[1].ariaValueNow;
+    const onChangePrimary = (e) => {
+      let ele = document.elementFromPoint(e.pageX, e.pageY);
+      let id = ele.parentNode.id;
+      let num = ele.parentNode.children[1].ariaValueNow;
 
-      modifyCart(id,{num}).then(res=>{
-        if(res.status=='204')
-        {
-          shopCart.value.forEach(item=>{
+      modifyCart(id, {num}).then(res => {
+        if (res.status == '204') {
+          shopCart.value.forEach(item => {
             //本地也需要改变数量以便后续计算价格
             //经验,忘记改变本地数据
-            if(item.id==id)
-            {
-              item.num=num;
+            if (item.id == id) {
+              item.num = num;
             }
           })
         }
@@ -182,11 +175,11 @@ export default {
 
     }
 
-    const onChange=debounce(onChangePrimary,200);
+    const onChange = debounce(onChangePrimary, 200);
 
-    const deleteItem=id=>{
-      Toast.loading({message:'正在删除商品...',duration:0,forbidClick:true});
-      delCart(id).then(res=>{
+    const deleteItem = id => {
+      Toast.loading({message: '正在删除商品...', duration: 0, forbidClick: true});
+      delCart(id).then(res => {
 
         store.dispatch('updateShopCartType');
         init();
@@ -196,14 +189,13 @@ export default {
     }
 
     const onSubmit = () => {
-        if(result.value.length==0)
-        {
-          Toast.fail('您还未选中任何商品哦...');
-          return;
-        }
+      if (result.value.length == 0) {
+        Toast.fail('您还未选中任何商品哦...');
+        return;
+      }
 
 
-        router.push('/orderpreview');
+      router.push('/orderpreview');
 
     }
     return {
@@ -229,7 +221,7 @@ export default {
   background-color: #FFFFFF !important;
 
   img {
-    width: 30%;
+    //width: 30%;
     height: 15vh;
   }
 
@@ -291,7 +283,7 @@ export default {
 .all {
   position: fixed;
   bottom: 75px;
-  left:5px;
+  left: 5px;
   z-index: 2;
 
 }
@@ -304,4 +296,6 @@ export default {
   background-color: WhiteSmoke;
 
 }
+
+
 </style>

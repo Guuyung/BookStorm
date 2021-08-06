@@ -44,7 +44,7 @@
           v-for="item in goods[curtab].list"
   @click="toDetail(item.id)"
           :key="item.id"
-          :price="item.price"
+          :price="item.price+'.00'"
           :title="item.title"
           :thumb="item.cover_url"
       />

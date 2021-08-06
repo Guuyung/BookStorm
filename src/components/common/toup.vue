@@ -9,8 +9,6 @@ import {onMounted, ref, watch, watchEffect} from "vue";
 export default {
   setup()
   {
-
-    console.log('123...');
     let isshow=ref(false);
     const toTop=()=>{
       emitter.emit('toTop');

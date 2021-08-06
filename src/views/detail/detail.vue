@@ -73,6 +73,7 @@ import {doCollect} from "@/network/collection";
 import {goupdateAva} from "@/network/profile";
 
 export default {
+  name:'detail',
   components: {bookitem, Navigator, scroll},
   setup() {
     let isCollected = ref(0);
@@ -84,6 +85,7 @@ export default {
       like_goods: {}
     });
     const route = useRoute();
+    //添加购物车
     const goCart = () => {
       addCart({goods_id: book.detail.id, num: 1}).then(res => {
         console.log(res)
@@ -99,6 +101,7 @@ export default {
       })
     };
 
+    //添加收藏
     const collect = (id) => {
       doCollect(id).then(res => {
 
@@ -113,6 +116,7 @@ export default {
       })
 
     }
+    //立即购买
     const buyNow = () => {
       addCart({goods_id: book.detail.id, num: 1}).then(res => {
         if (res && (res.status == '201' || res.status == '204')) {
@@ -127,21 +131,17 @@ export default {
       })
     }
 
+    function init(){
       getdetail(route.query.id).then(res => {
-
-
         book.detail = res.goods;
-
         book.like_goods = res.like_goods;
         isCollected.value = res.goods.is_collect;
         console.log(res)
-
-
       });
+    }
 
-
-
-
+    //初始化详情页面
+    init();
 
     return {
       ...toRefs(book),

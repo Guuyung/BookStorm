@@ -82,7 +82,6 @@ export default {
       this.$emit('pullingUp');
       bs.finishPullUp();
     });
-
   }
 
 }

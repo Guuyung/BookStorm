@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router/index'
 import vuex from '@/store'
 import Vue from 'vue'
+
 import 'vant/lib/index.css';
 import {
     Swipe, SwipeItem, Lazyload, Badge, Collapse, CollapseItem, Sidebar, SidebarItem,
@@ -10,26 +11,24 @@ import {
     Tabs,
     Card, Button, Tag, Form, Field, SwipeCell, SubmitBar
     , Toast, Notify, Stepper, Checkbox, CheckboxGroup, Cell, CellGroup, Pagination, Empty, AddressList
-    ,AddressEdit,ContactCard,Divider,Popup,Grid, GridItem,Image as VanImage,List,PullRefresh,Uploader
+    , AddressEdit, ContactCard, Divider, Popup, Grid, GridItem, Image as VanImage, List, PullRefresh, Uploader
 } from 'vant';
 
 
 let app = createApp(App);
-app.f = () => {
-    console.log(123)
-}
+
 app.use(Sidebar)
     .use(Toast)
-    .use(Uploader )
-    .use(PullRefresh )
+    .use(Uploader)
+    .use(PullRefresh)
     .use(VanImage)
-    .use(ContactCard )
-    .use(List  )
-    .use(Grid )
-    .use(GridItem )
-    .use(Popup  )
-    .use(AddressEdit )
-    .use(Divider )
+    .use(ContactCard)
+    .use(List)
+    .use(Grid)
+    .use(GridItem)
+    .use(Popup)
+    .use(AddressEdit)
+    .use(Divider)
     .use(AddressList)
     .use(Empty)
     .use(Pagination)
