@@ -60,6 +60,7 @@ import HomeSwiper from "@/views/home/homeSwiper";
 import {Toast} from "vant";
 
 export default {
+  name:'home',
   components: {HomeSwiper, Scroll, Toup, Booklist, TabControl, Recommend, Navigator},
   setup() {
     let banner = ref([]);

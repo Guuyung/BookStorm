@@ -1,14 +1,8 @@
 <template>
-<!--下方导航栏-->
-
-<!--  <router-view v-slot="{ Component }" :key="$route.query">-->
-<!--      <keep-alive>-->
-<!--        <component :is="Component" />-->
-<!--      </keep-alive>-->
-<!--  </router-view>-->
+<!--下方总导航栏-->
 
   <router-view v-slot="{ Component }">
-    <keep-alive exclude="detail" >
+    <keep-alive include="home,profile,category" >
       <component :is="Component" />
     </keep-alive>
   </router-view>

@@ -1,4 +1,5 @@
 <template>
+<!--  已经生成订单，可以付款-->
   <navigator>订单详情</navigator>
 
   <div class="top">

@@ -40,11 +40,11 @@ import {login} from "@/network/profile";
 import {useStore} from "vuex";
 export default {
   components: {Navigator},
-  setup: function () {
+  setup(){
     const store=useStore();
     const router = useRouter();
     let info = reactive({
-      email: 'a1352800232@qq.com', password: 'qweasd'
+      email: '123456aaa@qq.com', password: 'qweasdzxc'
     })
 
     //a1352800232@qq.com

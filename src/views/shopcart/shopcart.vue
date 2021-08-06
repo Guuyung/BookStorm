@@ -73,6 +73,7 @@ import {checkCart, delCart, getCart, modifyCart} from "@/network/shopCart";
 import {debounce} from "@/utils/debounce";
 
 export default {
+  name:'shopCart',
   components: {Navigator, scroll},
   setup() {
     let selectAll = ref(false)
@@ -85,14 +86,10 @@ export default {
 
     let total = computed(() => {
       let sum = 0;
-
       shopCart.value.filter(item => result.value.includes(item.id))
           .map(e => {
-
             let num = e.goods.num;
             let pr = e.goods.price;
-
-
             sum += parseInt(e.num) * parseFloat(e.goods.price);
           });
 

@@ -13,7 +13,7 @@
       @load="onLoad"
   >
 
-<!--  整个订单块-->
+<!-- 一个完整的订单，包括许多商品-->
     <template v-for="item in list" >
     <div class="order" v-if="item.orderDetails.data.length!=0"
          @click="$router.push({path:'/orderdetail',query:{id:item.id}})">
@@ -52,8 +52,11 @@ import TabControl from "@/components/common/tabControl";
 import {useStore} from "vuex";
 import {orderList} from "@/network/order";
 import Toup from "@/components/common/toup";
+import {sucLoad} from "@/utils/message";
+import {Toast} from "vant";
 
 export default {
+  name:"orderList",
   components: {Toup, TabControl, Navigator},
   setup() {
 
@@ -72,20 +75,18 @@ export default {
     })
 
     const init = () => {
+      sucLoad('加载成功')
       orderList({page: 1, status: parseInt('1'), include: 'orderDetails.goods'}).then(res => {
         console.log(res);
         state.list = res.data;
         state.totalPages=res.meta.pagination.total_pages;
+        Toast.clear();
       })
     }
     init();
     let active = computed(() =>
         store.state.curtab
     )
-
-    watchEffect(()=>{
-
-    })
 
     const onLoad = () => {
         if(state.curPage==state.totalPages)
@@ -95,28 +96,16 @@ export default {
         }
 
       orderList({page:++state.curPage,status: parseInt('1'), include: 'orderDetails.goods'}).then(res=>{
-        console.log(res);
-        console.log(res.meta.pagination.current_page)
         state.list.push(...res.data);
         state.curPage=res.meta.pagination.current_page;
         state.loading=false;
       })
-      console.log(state.loading)
     }
 
-    const onRefresh = () => {
-
-    }
-
-    watch(active, () => {
-
-
-    })
 
     return {
       ...toRefs(state),
       onLoad,
-      onRefresh,
     }
   }
 }

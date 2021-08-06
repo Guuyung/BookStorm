@@ -64,6 +64,7 @@ import {useRouter} from "vue-router";
 import {Toast} from "vant";
 
 export default {
+  name:'category',
   components: {Toup, Navigator, scroll},
   setup(){
     const router=useRouter();

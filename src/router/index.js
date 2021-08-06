@@ -154,9 +154,6 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
 
-    // console.log('isAuthRequired:',to.meta.isAuthRequired);
-    // console.log('store.state.isLogin',store.state.isLogin);
-    // console.log('store',store.state)
     if (to.meta.isAuthRequired && store.state.isLogin == false) {
         Notify({type: 'warning', message: '请先登录'});
         return next('/login');

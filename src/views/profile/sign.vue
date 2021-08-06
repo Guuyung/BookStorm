@@ -59,7 +59,7 @@ export default {
   setup() {
     const router=useRouter();
     let info=reactive({
-      name:'tes',email:'123@q.com',password_confirmation:'aaa',password:''
+      name:'',email:'',password_confirmation:'',password:''
     })
 
     const onSubmit=(val)=>{

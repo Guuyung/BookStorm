@@ -28,7 +28,12 @@ export function request(config){
         return res.data? res.data: res ;
     },err=>{
         //对所有错误进行提示
-        console.log(err.response)
+
+        if(err.response.data.status_code=='401')
+        {
+            Toast.fail('密码或账号错误')
+            return;
+        }
 
         if(err.response.status_code=='400')
         {
@@ -53,6 +58,7 @@ export function request(config){
             router.push('/login');
             return;
         }
+        console.log(err.response)
 
             if(err.response.data.errors)
             Notify(err.response.data.errors[Object.keys(err.response.data.errors)[0]][0]);

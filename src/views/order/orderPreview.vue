@@ -1,10 +1,12 @@
 <template>
+<!--  还未生成订单，未付款，可以付款或关闭-->
   <navigator>订单预览</navigator>
+
 
   <template v-if="noDefault">
     <van-contact-card type="add" @click="$router.push('/addresslist')"
                       style="background: var(--color-weak);width: 95%;margin: 10px auto;
-                        box-shadow: var(--shadow-down);color: ghostwhite;border-radius: 15px"
+                      box-shadow: var(--shadow-down);color: ghostwhite;border-radius: 15px"
     />
     <van-empty description="您还未添加收件人与地址哦..." type="error"></van-empty>
   </template>
@@ -60,6 +62,7 @@ import router from "@/router";
 import {useRouter} from "vue-router";
 
 export default {
+  name: 'orderPreview',
   components: {Navigator},
   setup() {
     const store = useStore();
@@ -134,11 +137,11 @@ export default {
 
       })
     }
-const router=useRouter();
-const onClose=()=>{
-      router.push({path:'/orderdetail',query:{id:state.order_id}});
+    const router = useRouter();
+    const onClose = () => {
+      router.push({path: '/orderdetail', query: {id: state.order_id}});
 
-}
+    }
     return {
       ...toRefs(state), onSubmit, onClose
 
